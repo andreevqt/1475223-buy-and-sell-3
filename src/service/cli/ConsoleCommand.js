@@ -1,8 +1,8 @@
 'use strict';
 
-const { singleton } = require("../../util");
+const { singleton } = require("../../utils");
 
-class CommandRegistry {
+class ConsoleCommand {
   constructor() {
     this.commands = new Map();
   }
@@ -21,4 +21,4 @@ class CommandRegistry {
   }
 }
 
-module.exports = singleton(CommandRegistry).getInstance();
+module.exports = singleton(ConsoleCommand).getInstance();

@@ -1,6 +1,6 @@
 'use strict';
 
-const commandRegistry = require(`./CommandRegistry`);
+const consoleCommand = require(`./ConsoleCommand`);
 const initCommands = require("./commands/init");
 
 const usage = () => console.log(`
@@ -23,7 +23,7 @@ initCommands();
 const command = getCommand();
 const args = getArgs();
 
-if (!commandRegistry.execute(command, args)) {
+if (!consoleCommand.execute(command, args)) {
   usage();
   return;
 }

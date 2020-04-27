@@ -1,8 +1,8 @@
 'use strict';
 
 const generate = require("./generate");
-const commandRegistry = require("../CommandRegistry");
+const consoleCommand = require("../ConsoleCommand");
 
 module.exports = () => {
-  commandRegistry.add("generate", generate);
+  consoleCommand.add("generate", generate);
 }
