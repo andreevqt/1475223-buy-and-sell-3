@@ -1,6 +1,7 @@
 'use strict';
 
 const { singleton } = require("../../utils");
+const { UnknownCommandException } = require("./exceptions");
 
 class ConsoleCommand {
   constructor() {
@@ -9,16 +10,16 @@ class ConsoleCommand {
 
   add(name, cb) {
     this.commands.set(name, cb);
+    return this;
   }
 
-  execute(name, args) {
+  async execute(name, args) {
     const command = this.commands.get(name);
     if (!command || typeof command !== "function") {
-      return false;
+      throw new UnknownCommandException("Unknown command");
     }
-
     return command(args);
   }
 }
 
-module.exports = singleton(ConsoleCommand).getInstance();
+module.exports = ConsoleCommand;

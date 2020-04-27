@@ -1,7 +1,8 @@
 'use strict';
 
-const consoleCommand = require(`./ConsoleCommand`);
-const initCommands = require("./commands/init");
+const ConsoleCommand = require(`./ConsoleCommand`);
+const generate = require(`./commands/generate`);
+const { UnknownCommandException } = require("./exceptions");
 
 const usage = () => console.log(`
   Программа запускает http-сервер и формирует файл с данными для API.
@@ -15,16 +16,27 @@ const usage = () => console.log(`
   --generate <count>    формирует файл mocks.json
 `);
 
-const getCommand = () => process.argv[2] && process.argv[2].slice(2);
-const getArgs = () => process.argv[3];
-
-initCommands();
-
-const command = getCommand();
-const args = getArgs();
-
-if (!consoleCommand.execute(command, args)) {
+if (process.argv.length < 3) {
+  console.log("1");
   usage();
-  return;
+  process.exit(1);
 }
+
+const command = process.argv[2];
+const args = process.argv.slice(3);
+const consoleCommand = new ConsoleCommand();
+
+
+consoleCommand
+  .add("--generate", generate)
+  .execute(command, args)
+  .then(() => console.log("done"))
+  .catch(err => {
+    if (err instanceof UnknownCommandException) {
+      usage();
+    } else {
+      console.log(err.message);
+    }
+    process.exit(1);
+  });
 

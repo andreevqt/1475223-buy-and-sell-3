@@ -1,48 +1,54 @@
 'use strict';
 
-const titles = [
-  `Продам книги Стивена Кинга.`,
-  `Продам новую приставку Sony Playstation 5.`,
-  `Продам отличную подборку фильмов на VHS.`,
-  `Куплю антиквариат.`,
-  `Куплю породистого кота.`,
-  `Продам коллекцию журналов «Огонёк».`,
-  `Отдам в хорошие руки подшивку «Мурзилка».`,
-  `Продам советскую посуду. Почти не разбита.`,
-  `Куплю детские санки.`,
-];
+const fs = require(`fs`).promises;
 
-const descriptions = [
-  `Товар в отличном состоянии.`,
-  `Пользовались бережно и только по большим праздникам.`,
-  `Продаю с болью в сердце...`,
-  `Бонусом отдам все аксессуары.`,
-  `Даю недельную гарантию.`,
-  `Если товар не понравится — верну всё до последней копейки.`,
-  `Это настоящая находка для коллекционера!`,
-  `Если найдёте дешевле — сброшу цену.`,
-  `Таких предложений больше нет!`,
-  `Две страницы заляпаны свежим кофе.`,
-  `При покупке с меня бесплатная доставка в черте города.`,
-  `Кажется, что это хрупкая вещь.`,
-  `Мой дед не мог её сломать.`,
-  `Кому нужен этот новый телефон, если тут такое...`,
-  `Не пытайтесь торговаться. Цену вещам я знаю.`
-];
+const {
+  snuffle,
+  rnd,
+  pad,
+  getNumLen
+} = require(`../../../utils`);
 
-const categories = [
-  `Книги`,
-  `Разное`,
-  `Посуда`,
-  `Игры`,
-  `Животные`,
-  `Журналы`
-];
+const {
+  TITLES,
+  CATEGORIES,
+  DESCRIPTIONS,
+  TYPES,
+  MIN_PRICE,
+  MAX_PRICE,
+  MAX_OFFERS_COUNT,
+  MAX_IMAGE_IDX
+} = require(`../constants`);
 
-const generate = (args) => {
-  // generation logic
-  return true;
+const getRndField = (arr) => arr[rnd(0, arr.length - 1)];
+
+const generatePicture = () => {
+  const idx = rnd(0, MAX_IMAGE_IDX);
+  return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}`;
+}
+
+const generateOffer = () => {
+  return {
+    title: getRndField(TITLES),
+    picture: generatePicture(),
+    category: snuffle(CATEGORIES),
+    description: snuffle(DESCRIPTIONS).join(` `),
+    type: getRndField(TYPES),
+    sum: rnd(MIN_PRICE, MAX_PRICE),
+  };
 };
 
+const generate = async (args) => {
+  const count = +args[0];
+  if (count > MAX_OFFERS_COUNT) {
+    throw Error("Максимальное количество предложений 1000");
+  }
+
+  const offers = [...Array(count).keys()].map(() => generateOffer());
+  const path = `${process.cwd()}/data`;
+
+  return fs.mkdir(path, { recursive: true })
+    .then(() => fs.writeFile(`${path}/mock.json`, JSON.stringify(offers, null, 2)));
+};
 
 module.exports = generate;

@@ -15,7 +15,7 @@ const snuffle = (arr) => {
     arr[randomIndex] = temporaryValue;
   }
 
-  return arr;
+  return arr.slice(0, rnd(1, arr.length));
 };
 
 // https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
@@ -34,8 +34,14 @@ const singleton = (Base) => class extends Base {
   }
 }
 
+const pad = (num, size) => ('000000000' + num).substr(-size);
+
+const getNumLen = (num) => num.toString().length; 
+
 module.exports = {
   singleton,
   snuffle,
-  rnd
+  rnd,
+  pad,
+  getNumLen
 }
