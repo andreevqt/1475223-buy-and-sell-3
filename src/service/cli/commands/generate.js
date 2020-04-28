@@ -4,7 +4,7 @@ const fs = require(`fs`).promises;
 
 const {
   snuffle,
-  rnd,
+  randomInt,
   pad,
   getNumLen
 } = require(`../../../utils`);
@@ -20,35 +20,40 @@ const {
   MAX_IMAGE_IDX
 } = require(`../constants`);
 
-const getRndField = (arr) => arr[rnd(0, arr.length - 1)];
+const getRndField = (arr) => arr[randomInt(0, arr.length - 1)];
 
 const generatePicture = () => {
-  const idx = rnd(0, MAX_IMAGE_IDX);
-  return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}`;
-}
+  const idx = randomInt(0, MAX_IMAGE_IDX);
+  return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
+};
 
 const generateOffer = () => {
   return {
     title: getRndField(TITLES),
     picture: generatePicture(),
-    category: snuffle(CATEGORIES),
-    description: snuffle(DESCRIPTIONS).join(` `),
+    category: snuffle(CATEGORIES).slice(0, randomInt(1, 3)),
+    description: snuffle(DESCRIPTIONS).slice(1, 5).join(` `),
     type: getRndField(TYPES),
-    sum: rnd(MIN_PRICE, MAX_PRICE),
+    sum: randomInt(MIN_PRICE, MAX_PRICE),
   };
+};
+
+const writeFile = (path, offers) => {
+  return fs.mkdir(path, {recursive: true})
+    .then(() => fs.writeFile(`${path}/mocks.json`, JSON.stringify(offers, null, 2)));
 };
 
 const generate = async (args) => {
   const count = +args[0];
+
   if (count > MAX_OFFERS_COUNT) {
-    throw Error("Максимальное количество предложений 1000");
+    throw Error(`Максимальное количество предложений ${MAX_OFFERS_COUNT}`);
   }
 
-  const offers = [...Array(count).keys()].map(() => generateOffer());
-  const path = `${process.cwd()}/data`;
+  const path = `../../../data`;
+  const offers = count ? [...Array(count).keys()].map(() => generateOffer()) : [];
 
-  return fs.mkdir(path, { recursive: true })
-    .then(() => fs.writeFile(`${path}/mock.json`, JSON.stringify(offers, null, 2)));
+  return writeFile(path, offers);
 };
 
 module.exports = generate;
