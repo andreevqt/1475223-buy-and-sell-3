@@ -1,3 +1,21 @@
 'use strict';
 
-console.log(`Hello, world!`);
+const ConsoleCommand = require(`./cli/ConsoleCommand`);
+const generate = require(`./cli/commands/generate`);
+const version = require(`./cli/commands/version`);
+const help = require(`./cli/commands/help`);
+
+const command = process.argv[2];
+const args = process.argv.slice(3);
+
+const consoleCommand = new ConsoleCommand();
+consoleCommand
+  .add(`--generate`, generate)
+  .add(`--version`, version)
+  .add(`--help`, help)
+  .execute(command, args)
+  .catch((err) => {
+    console.log(err.message);
+    process.exit(1);
+  });
+
