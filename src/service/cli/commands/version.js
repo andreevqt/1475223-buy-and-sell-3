@@ -2,12 +2,8 @@
 
 const packageJson = require(`../../../../package.json`);
 
-const version = (/* args */) => {
-  const ver = packageJson.version;
-  return new Promise((resolve/* , reject */) => {
-    console.log(ver);
-    resolve();
-  });
+const version = async (/*commandsManager,  args */) => {
+  console.log(packageJson.version);
 };
 
 module.exports = version;

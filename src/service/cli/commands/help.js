@@ -1,21 +1,14 @@
 'use strict';
 
-const help = (/* args */) => {
-  return new Promise((resolve/* , reject */) => {
-    console.log(`
-      Программа запускает http-сервер и формирует файл с данными для API.
-    
-      Гайд:
-      server <command>
-      
-      Команды:
-      --version:            выводит номер версии
-      --help:               печатает этот текст
-      --generate <count>    формирует файл mocks.json
-    `);
+const help = async (commandsManager, /* args */) => {
 
-    resolve();
-  });
+  let out = `    ${commandsManager.description}\n\n`;
+  out += `    Гайд:\n`
+  out += `    ${commandsManager.name} <command>\n\n`;
+  out += `    Команды:\n`;
+  commandsManager.commands.forEach(({ description }, name) => {
+    out += `    ${name}:    ${description}\n`;
+  })
 };
 
 module.exports = help;
