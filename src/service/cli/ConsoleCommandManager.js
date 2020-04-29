@@ -2,13 +2,13 @@
 
 class ConsoleCommandManager {
   constructor(name, description) {
-    this.name = name
+    this.name = name;
     this.description = description;
     this.commands = new Map();
   }
 
-  add(name, description, cb) {
-    this.commands.set(name, { description, cb });
+  add(name, description, cb, args = []) {
+    this.commands.set(name, {name, description, cb, args});
     return this;
   }
 

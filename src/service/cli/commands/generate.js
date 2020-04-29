@@ -44,7 +44,7 @@ const writeFile = (outDir, offers) => {
     .then(() => fs.writeFile(`${outDir}/mocks.json`, JSON.stringify(offers, null, 2)));
 };
 
-const generate = async (args) => {
+const generate = async (commandManager, args) => {
   const count = +args[0];
 
   if (count > MAX_OFFERS_COUNT) {
