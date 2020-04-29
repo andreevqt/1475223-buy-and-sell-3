@@ -18,9 +18,9 @@ const commandManager = new ConsoleCommandManager(
 /* eslint-enable */
 
 commandManager
-  .add(`--generate`, `выводит номер версии`, generate, [`count`])
-  .add(`--version`, `печатает этот текст`, version)
-  .add(`--help`, `формирует файл mocks.json`, help)
+  .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
+  .add(`--version`, `выводит номер версии`, version)
+  .add(`--help`, `печатает этот текст`, help)
   .execute(command, args)
   .catch((err) => {
     process.exit(1);
