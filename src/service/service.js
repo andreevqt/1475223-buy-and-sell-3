@@ -23,5 +23,6 @@ commandManager
   .add(`--help`, `печатает этот текст`, help)
   .execute(command, args)
   .catch((err) => {
+    console.log(err.message);
     process.exit(1);
   });
