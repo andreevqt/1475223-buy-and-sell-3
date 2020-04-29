@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require(`fs`).promises;
+const path = require(`path`);
 
 const {
   snuffle,
@@ -38,9 +39,9 @@ const generateOffer = () => {
   };
 };
 
-const writeFile = (path, offers) => {
-  return fs.mkdir(path, {recursive: true})
-    .then(() => fs.writeFile(`${path}/mocks.json`, JSON.stringify(offers, null, 2)));
+const writeFile = (outDir, offers) => {
+  return fs.mkdir(outDir, {recursive: true})
+    .then(() => fs.writeFile(`${outDir}/mocks.json`, JSON.stringify(offers, null, 2)));
 };
 
 const generate = async (args) => {
@@ -50,10 +51,10 @@ const generate = async (args) => {
     throw Error(`Максимальное количество предложений ${MAX_OFFERS_COUNT}`);
   }
 
-  const path = `../../../data`;
+  const outDir = path.resolve(__dirname, `../../../../`);
   const offers = count ? [...Array(count).keys()].map(() => generateOffer()) : [];
 
-  return writeFile(path, offers);
+  return writeFile(outDir, offers);
 };
 
 module.exports = generate;
