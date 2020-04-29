@@ -32,7 +32,7 @@ const generateOffer = () => {
   return {
     type: getRndField(TYPES),
     title: getRndField(TITLES),
-    description: snuffle(DESCRIPTIONS).slice(1, 5).join(` `),
+    description: snuffle(DESCRIPTIONS).slice(0, randomInt(1, 5)).join(` `),
     picture: generatePicture(),
     sum: randomInt(MIN_PRICE, MAX_PRICE),
     category: snuffle(CATEGORIES).slice(0, randomInt(1, 3)),
