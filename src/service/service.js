@@ -1,9 +1,11 @@
 'use strict';
 
 const ConsoleCommand = require(`./cli/ConsoleCommand`);
-const generate = require(`./cli/commands/generate`);
-const version = require(`./cli/commands/version`);
-const help = require(`./cli/commands/help`);
+const {
+  generate,
+  version,
+  help
+} = require(`./cli/commands`);
 
 const command = process.argv[2];
 const args = process.argv.slice(3);
