@@ -4,7 +4,8 @@ const ConsoleCommandManager = require(`./cli/ConsoleCommandManager`);
 const {
   generate,
   version,
-  help
+  help,
+  server
 } = require(`./cli/commands`);
 const chalk = require(`chalk`);
 
@@ -22,6 +23,7 @@ commandManager
   .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
   .add(`--version`, `выводит номер версии`, version)
   .add(`--help`, `печатает этот текст`, help)
+  .add(`--server`, `запускает http-servier`, server, [`port`])
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка!`));
