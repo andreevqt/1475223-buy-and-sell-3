@@ -6,6 +6,7 @@ const {
   version,
   help
 } = require(`./cli/commands`);
+const chalk = require(`chalk`);
 
 const command = process.argv[2];
 const args = process.argv.slice(3);
@@ -23,6 +24,7 @@ commandManager
   .add(`--help`, `печатает этот текст`, help)
   .execute(command, args)
   .catch((err) => {
-    console.log(err.message);
+    console.log(chalk.red(`Ошибка!`));
+    console.log(chalk.red(err.message));
     process.exit(1);
   });

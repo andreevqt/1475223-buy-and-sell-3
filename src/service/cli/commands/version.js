@@ -1,9 +1,10 @@
 'use strict';
 
 const packageJson = require(`../../../../package.json`);
+const chalk = require(`chalk`);
 
-const version = async (/* commandsManager,  args */) => {
-  console.log(packageJson.version);
+const version = async (/* manager,  args */) => {
+  console.log(chalk.green(packageJson.version));
 };
 
 module.exports = version;
