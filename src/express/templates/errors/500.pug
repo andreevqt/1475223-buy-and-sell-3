@@ -1,0 +1,22 @@
+extends ../layouts/error/layout
+block variables
+  - var bodyClass = `body-server`
+  - var htmlClass = `html-server`
+
+block content
+  section.error
+    h1.error__title 500
+    h2.error__subtitle Ошибка cервера
+    ul.error__list
+      li.error__item
+        a(href="/register") Вход и регистрация
+      li.error__item
+        a(href="/offers/add") Новая публикация
+      li.error__item
+        a(href="/") Главная страница
+    form.error__search.search.search--small(method="get" action="#" autocomplete="off")
+      input(type="search" name="search" placeholder="Поиск" aria-label="Поиск")
+      .search__icon
+      .search__close-btn
+    a.error__logo.logo(href="main.html")
+      img(src="/img/logo.svg" width="179" height="34" alt="Логотип Куплю Продам")
