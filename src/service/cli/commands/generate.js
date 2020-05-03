@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const path = require(`path`);
+const chalk = require(`chalk`);
 
 const {
   snuffle,
@@ -44,7 +45,7 @@ const writeFile = (outDir, offers) => {
     .then(() => fs.writeFile(`${outDir}/mocks.json`, JSON.stringify(offers, null, 2)));
 };
 
-const generate = async (commandManager, args) => {
+const generate = async (manager, args) => {
   const count = +args[0];
 
   if (count > MAX_OFFERS_COUNT) {
@@ -54,7 +55,8 @@ const generate = async (commandManager, args) => {
   const outDir = path.resolve(__dirname, `../../../../`);
   const offers = count ? [...Array(count).keys()].map(() => generateOffer()) : [];
 
-  return writeFile(outDir, offers);
+  return writeFile(outDir, offers)
+    .then(() => console.log(chalk.green(`Сгенерировано ${offers.length} предложений!`)));
 };
 
 module.exports = generate;
