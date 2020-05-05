@@ -5,7 +5,7 @@ const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
-  snuffle,
+  shuffle,
   randomInt,
   pad,
   getNumLen
@@ -30,10 +30,10 @@ const generateOffer = (titles, sentences, categories) => {
   return {
     type: getRndField(TYPES),
     title: getRndField(titles),
-    description: snuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
+    description: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
     picture: generatePicture(),
     sum: randomInt(MIN_PRICE, MAX_PRICE),
-    category: snuffle(categories).slice(0, randomInt(1, 3)),
+    category: shuffle(categories).slice(0, randomInt(1, 3)),
   };
 };
 
