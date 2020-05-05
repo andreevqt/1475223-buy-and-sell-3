@@ -2,6 +2,7 @@
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
+const {nanoid} = require(`nanoid`);
 
 const {
   shuffle,
@@ -15,8 +16,9 @@ const {
   MIN_PRICE,
   MAX_PRICE,
   MAX_OFFERS_COUNT,
-  MAX_IMAGE_IDX
-} = require(`../constants`);
+  MAX_IMAGE_IDX,
+  ID_LEN
+} = require(`../../constants`);
 
 const getRndField = (arr) => arr[randomInt(0, arr.length - 1)];
 
@@ -25,13 +27,24 @@ const generatePicture = () => {
   return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
 };
 
-const generateOffer = (titles, sentences, categories) => {
+const generateComments = (comments) => {
+  return shuffle(comments)
+    .slice(0, randomInt(1, comments.length)).
+    map((comment) => ({
+      id: nanoid(ID_LEN),
+      text: comment
+    }));
+};
+
+const generateOffer = (titles, sentences, categories, comments) => {
   return {
+    id: nanoid(6),
     type: getRndField(TYPES),
     title: getRndField(titles),
     description: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
     picture: generatePicture(),
     sum: randomInt(MIN_PRICE, MAX_PRICE),
+    comments: generateComments(comments),
     category: shuffle(categories).slice(0, randomInt(1, 3)),
   };
 };
@@ -52,16 +65,17 @@ const generate = async (manager, args) => {
     throw Error(`Максимальное количество предложений ${MAX_OFFERS_COUNT}`);
   }
 
-  const rootDir = process.cwd();
+  const rootDir = `${process.cwd()}/data`;
 
-  const sentences = await readFile(`${rootDir}/data/sentences.txt`);
-  const categories = await readFile(`${rootDir}/data/categories.txt`);
-  const titles = await readFile(`${rootDir}/data/titles.txt`);
+  const sentences = await readFile(`${rootDir}/sentences.txt`);
+  const categories = await readFile(`${rootDir}/categories.txt`);
+  const titles = await readFile(`${rootDir}/titles.txt`);
+  const comments = await readFile(`${rootDir}/comments.txt`);
 
   const offers = Array(count).fill(``)
-    .map(() => generateOffer(titles, sentences, categories));
+    .map(() => generateOffer(titles, sentences, categories, comments));
 
-  return writeFile(rootDir, offers)
+  return writeFile(process.cwd(), offers)
     .then(() => console.log(chalk.green(`Сгенерировано ${offers.length} предложений!`)));
 };
 
