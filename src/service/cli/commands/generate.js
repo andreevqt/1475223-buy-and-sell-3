@@ -5,16 +5,13 @@ const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
-  snuffle,
+  shuffle,
   randomInt,
   pad,
   getNumLen
 } = require(`../../../utils`);
 
 const {
-  TITLES,
-  CATEGORIES,
-  DESCRIPTIONS,
   TYPES,
   MIN_PRICE,
   MAX_PRICE,
@@ -29,14 +26,14 @@ const generatePicture = () => {
   return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
 };
 
-const generateOffer = () => {
+const generateOffer = (titles, sentences, categories) => {
   return {
     type: getRndField(TYPES),
-    title: getRndField(TITLES),
-    description: snuffle(DESCRIPTIONS).slice(0, randomInt(1, 5)).join(` `),
+    title: getRndField(titles),
+    description: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),
     picture: generatePicture(),
     sum: randomInt(MIN_PRICE, MAX_PRICE),
-    category: snuffle(CATEGORIES).slice(0, randomInt(1, 3)),
+    category: shuffle(categories).slice(0, randomInt(1, 3)),
   };
 };
 
@@ -45,17 +42,27 @@ const writeFile = (outDir, offers) => {
     .then(() => fs.writeFile(`${outDir}/mocks.json`, JSON.stringify(offers, null, 2)));
 };
 
+const readFile = (file) => {
+  return fs.readFile(file, `utf8`).then((data) => data.split(/\r?\n/));
+};
+
 const generate = async (manager, args) => {
-  const count = +args[0];
+  const count = +args[0] || 0;
 
   if (count > MAX_OFFERS_COUNT) {
     throw Error(`Максимальное количество предложений ${MAX_OFFERS_COUNT}`);
   }
 
-  const outDir = path.resolve(__dirname, `../../../../`);
-  const offers = count ? [...Array(count).keys()].map(() => generateOffer()) : [];
+  const rootDir = path.resolve(__dirname, `../../../../`);
 
-  return writeFile(outDir, offers)
+  const sentences = await readFile(`${rootDir}/data/sentences.txt`);
+  const categories = await readFile(`${rootDir}/data/categories.txt`);
+  const titles = await readFile(`${rootDir}/data/titles.txt`);
+
+  const offers = Array(count).fill(``)
+    .map(() => generateOffer(titles, sentences, categories));
+
+  return writeFile(rootDir, offers)
     .then(() => console.log(chalk.green(`Сгенерировано ${offers.length} предложений!`)));
 };
 
