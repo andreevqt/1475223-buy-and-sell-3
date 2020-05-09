@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const path = require(`path`);
 const chalk = require(`chalk`);
 
 const {
@@ -53,7 +52,7 @@ const generate = async (manager, args) => {
     throw Error(`Максимальное количество предложений ${MAX_OFFERS_COUNT}`);
   }
 
-  const rootDir = path.resolve(__dirname, `../../../../`);
+  const rootDir = process.cwd();
 
   const sentences = await readFile(`${rootDir}/data/sentences.txt`);
   const categories = await readFile(`${rootDir}/data/categories.txt`);
