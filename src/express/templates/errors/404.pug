@@ -1,0 +1,22 @@
+extends ../layouts/error/layout
+block variables
+  - var bodyClass = `body-not-found`
+  - var htmlClass = `html-not-found`
+
+block content
+  section.error
+    h1.error__title 404
+    h2.error__subtitle Страница не найдена
+    ul.error__list
+      li.error__item
+        a(href="/register") Вход и регистрация
+      li.error__item
+        a(href="/offers/add") Новая публикация
+      li.error__item
+        a(href="/") Главная страница
+    form.error__search.search.search--small(method="get" action="#" autocomplete="off")
+      input(type="search" name="search" placeholder="Поиск" aria-label="Поиск")
+      .search__icon
+      .search__close-btn
+    a.error__logo.logo(href="/")
+      img(src="/img/logo.svg" width="179" height="34" alt="Логотип Куплю Продам")

@@ -1,0 +1,11 @@
+include ../../mixins/mixins
+doctype html
+html(lang="ru")
+  head
+    include head
+  body
+    include header
+    main.page-content
+      block content
+    include footer
+    include scripts
