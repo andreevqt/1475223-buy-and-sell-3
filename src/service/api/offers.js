@@ -79,10 +79,10 @@ module.exports = (app, offerService, commentService) => {
     const deleted = commentService.delete(offerId, commentId);
 
     if (!deleted) {
-      return res.status(404).send(`Not found`);
+      res.status(404).send(`Not found`);
     }
 
-    return res.status(200).json(deleted);
+    res.status(200).json(deleted);
   });
 
   router.put(`/:offerId/comments/:commentId`, commentValidator, (req, res) => {
@@ -91,10 +91,10 @@ module.exports = (app, offerService, commentService) => {
 
     const updated = commentService.update(offerId, commentId, comment);
     if (!updated) {
-      return res.status(404).send(`Not found`);
+      res.status(404).send(`Not found`);
     }
 
-    return res.status(200).send(updated);
+    res.status(200).send(updated);
   });
 
   router.post(`/:offerId/comments`, commentValidator, (req, res) => {
@@ -103,9 +103,9 @@ module.exports = (app, offerService, commentService) => {
 
     const created = commentService.create(offerId, comment);
     if (!created) {
-      return res.status(404).send(`Not found`);
+      res.status(404).send(`Not found`);
     }
 
-    return res.status(201).send(created);
+    res.status(201).send(created);
   });
 };
