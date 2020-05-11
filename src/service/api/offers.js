@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const {paramsValidator} = require(`../middleware`);
 
 const router = new Router();
+
 const offerValidator = paramsValidator([
   `type`,
   `title`,

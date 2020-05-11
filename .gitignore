@@ -16,6 +16,3 @@ build/
 
 # mocks
 mocks.json
-
-# rest client
-*.http

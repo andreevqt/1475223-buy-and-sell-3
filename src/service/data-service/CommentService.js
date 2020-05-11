@@ -17,13 +17,17 @@ class CommentService {
     return offer.comments;
   }
 
-  create(offerId, text) {
+  create(offerId, attrs) {
     const offer = this.offerService.findOne(offerId);
     if (!offer) {
       return null;
     }
 
-    const comment = {id: nanoid(ID_LEN), text};
+    /* eslint-disable no-unused-vars */
+    const {id, ...rest} = attrs;
+    /* eslint-enable */
+
+    const comment = {id: nanoid(ID_LEN), ...rest};
     offer.comments = [...offer.comments, comment];
 
     this.offerService.update(offerId, offer);
