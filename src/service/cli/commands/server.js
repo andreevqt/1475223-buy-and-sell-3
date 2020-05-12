@@ -17,6 +17,8 @@ const server = async (manager, args) => {
   app.use(express.json());
   app.use(API_PREFIX, await api());
 
+  app.use((req, res) => res.status(404).send(`Not found`));
+
   return once(app.listen(port), `listening`)
     .then(() => console.log(chalk.green(`Ожидаю соединений на ${port}`)));
 };
