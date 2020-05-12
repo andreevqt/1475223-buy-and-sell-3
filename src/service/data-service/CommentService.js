@@ -23,11 +23,7 @@ class CommentService {
       return null;
     }
 
-    /* eslint-disable no-unused-vars */
-    const {id, ...rest} = attrs;
-    /* eslint-enable */
-
-    const comment = {id: nanoid(ID_LEN), ...rest};
+    const comment = {id: nanoid(ID_LEN), ...attrs};
     offer.comments = [...offer.comments, comment];
 
     return comment;
@@ -53,11 +49,6 @@ class CommentService {
   }
 
   update(offerId, commentId, attrs) {
-    /* eslint-disable no-unused-vars */
-    // omit
-    const {id, ...rest} = attrs;
-    /* eslint-enable */
-
     const offer = this.offerService.findOne(offerId);
     if (!offer) {
       return null;
@@ -66,10 +57,9 @@ class CommentService {
     let updated = null;
     offer.comments = offer.comments.map((comment) => {
       if (comment.id === commentId) {
-        updated = {...comment, ...rest};
+        updated = {...comment, ...attrs};
         return updated;
       }
-
       return comment;
     });
 

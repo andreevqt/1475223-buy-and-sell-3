@@ -41,15 +41,10 @@ class OfferService {
   }
 
   update(offerId, attrs) {
-    /* eslint-disable no-unused-vars */
-    // omit id
-    const {id, ...rest} = attrs;
-    /* eslint-enable */
-
     let updated = null;
     this.offers = this.offers.map((offer) => {
       if (offer.id === offerId) {
-        updated = {...offer, ...rest};
+        updated = {...offer, ...attrs};
         return updated;
       }
       return offer;
