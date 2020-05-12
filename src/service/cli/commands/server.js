@@ -9,12 +9,13 @@ const {
   API_SERVER_DEFAULT_PORT
 } = require(`../../constants`);
 
-const app = express();
-app.use(express.json());
-app.use(`${API_PREFIX}`, api);
-
 const server = async (manager, args) => {
   const port = args[0] || API_SERVER_DEFAULT_PORT;
+
+  const app = express();
+
+  app.use(express.json());
+  app.use(API_PREFIX, await api());
 
   return once(app.listen(port), `listening`)
     .then(() => console.log(chalk.green(`Ожидаю соединений на ${port}`)));
