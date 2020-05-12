@@ -30,7 +30,6 @@ class CommentService {
     const comment = {id: nanoid(ID_LEN), ...rest};
     offer.comments = [...offer.comments, comment];
 
-    this.offerService.update(offerId, offer);
     return comment;
   }
 
@@ -50,7 +49,6 @@ class CommentService {
       return true;
     });
 
-    this.offerService.update(offerId, offer);
     return deleted;
   }
 
