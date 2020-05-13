@@ -6,7 +6,7 @@ class SearchService {
   }
 
   search(query = ``) {
-    const regex = new RegExp(`^${query}`);
+    const regex = new RegExp(`^${query}`, 'i');
     return this.offers.filter((offer) => regex.test(offer.title));
   }
 }
