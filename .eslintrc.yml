@@ -6,3 +6,6 @@ env:
   node: true
 
 extends: 'htmlacademy/node'
+
+rules:
+  indent: [error, 2, {CallExpression: {arguments: 'off'}}]

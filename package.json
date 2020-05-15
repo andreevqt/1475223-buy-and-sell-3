@@ -23,10 +23,11 @@
   "homepage": "https://github.com/qprquo/1475223-buy-and-sell-3#readme",
   "devDependencies": {
     "eslint": "6.8.0",
-    "eslint-config-htmlacademy": "0.5.2",
-    "nodemon": "2.0.3"
+    "eslint-config-htmlacademy": "0.5.2"
   },
   "dependencies": {
+    "nodemon": "2.0.3",
+    "nanoid": "3.1.6",
     "chalk": "4.0.0",
     "express": "4.17.1",
     "pug": "2.0.4"
