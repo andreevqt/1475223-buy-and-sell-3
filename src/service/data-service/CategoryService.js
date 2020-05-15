@@ -1,12 +1,10 @@
 'use strict';
 
-class CategoryService {
-  constructor(offers) {
-    this.offers = offers;
-  }
+const BaseService = require(`./BaseService`);
 
+class CategoryService extends BaseService {
   findAll() {
-    const categories = this.offers
+    const categories = this._offers
       .reduce((acc, offer) => ([...acc, ...offer.category]), []);
 
     return [...new Set(categories)];

@@ -38,7 +38,7 @@ const generateComments = (comments) => {
 
 const generateOffer = (titles, sentences, categories, comments) => {
   return {
-    id: nanoid(6),
+    id: nanoid(ID_LEN),
     type: getRndField(TYPES),
     title: getRndField(titles),
     description: shuffle(sentences).slice(0, randomInt(1, 5)).join(` `),

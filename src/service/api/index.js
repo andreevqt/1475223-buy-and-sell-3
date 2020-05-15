@@ -14,19 +14,31 @@ const {
   CategoryService
 } = require(`../data-service`);
 
-module.exports = async () => {
-  let mocks = await getMocks();
+let mocks = [];
 
-  const offerService = new OfferService(mocks);
-  const commentService = new CommentService(offerService);
-  const searchService = new SearchService(mocks);
-  const categoryService = new CategoryService(mocks);
+const offerService = new OfferService(mocks);
+const commentService = new CommentService(offerService);
+const searchService = new SearchService(mocks);
+const categoryService = new CategoryService(mocks);
 
-  const app = new Router();
+const router = new Router();
 
-  offers(app, offerService, commentService);
-  search(app, searchService);
-  categories(app, categoryService);
+offers(router, offerService, commentService);
+search(router, searchService);
+categories(router, categoryService);
 
-  return app;
+const loadData = async () => {
+  mocks = await getMocks();
+  offerService.offers = mocks;
+  categoryService.offers = mocks;
+  searchService.offers = mocks;
+};
+
+module.exports = {
+  router,
+  offerService,
+  commentService,
+  searchService,
+  categoryService,
+  loadData
 };

@@ -6,5 +6,7 @@ module.exports = {
   pad: require(`./pad`),
   getNumLen: require(`./getNumLen`),
   maxStringLen: require(`./maxStringLen`),
-  getMocks: require(`./getMocks`)
+  getMocks: require(`./getMocks`),
+  formatDate: require(`./formatDate`),
+  logger: require(`./logger`),
 };

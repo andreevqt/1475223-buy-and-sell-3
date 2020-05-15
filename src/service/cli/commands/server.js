@@ -1,26 +1,40 @@
 'use strict';
 
+const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
-const chalk = require(`chalk`);
 const api = require(`../../api`);
+const {logger} = require(`../../../utils`).logger;
+const {logRequests} = require(`../../middleware`);
 const {
-  API_PREFIX,
-  API_SERVER_DEFAULT_PORT
+  API_PREFIX
 } = require(`../../constants`);
 
 const server = async (manager, args) => {
-  const port = args[0] || API_SERVER_DEFAULT_PORT;
+  const port = args[0] || config.API_SERVER_PORT;
 
   const app = express();
+  app.use(logRequests);
 
-  app.use(express.json());
-  app.use(API_PREFIX, await api());
+  // load data
+  await api.loadData();
+
+  app.use(API_PREFIX, (req, res, next) => {
+    logger.error(`[ROUTE]: ${req.method} ${req.url}`);
+    next();
+  }, api.router);
 
   app.use((req, res) => res.status(404).send(`Not found`));
+  app.use((err, req, res, _next) => {
+    logger.info(`[ERROR]: ${err.stack}`);
+    res.status(500).send(`Internal server error`);
+  });
 
   return once(app.listen(port), `listening`)
-    .then(() => console.log(chalk.green(`Ожидаю соединений на ${port}`)));
+    .then(() => logger.info(`[SERVER]: Ожидаю соединений на ${port}`))
+    .catch((err) => {
+      logger.info(`[ERROR]: ${err.msg}`);
+    });
 };
 
 module.exports = server;
