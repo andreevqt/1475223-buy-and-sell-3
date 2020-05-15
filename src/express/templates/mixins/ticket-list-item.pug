@@ -1,0 +1,21 @@
+mixin ticket-list-item(offer, js=false)
+  li(class=`${attributes.class} ${js ? ` js-card` : ``}`)
+    .ticket-card.ticket-card--color01
+      .ticket-card__img
+        img(src=(offer.picture ? `/img/${offer.picture}` : null), srcset=(offer.picture ? `/img/${offer.picture.replace(/\./, `@2x.`)} 2x` : null), alt="Изображение товара")
+      .ticket-card__info
+        span.ticket-card__label #{offer.type === "sell" ? "Продам" : "Куплю"}
+        .ticket-card__categories
+          each cat in offer.category
+            a(href="#") #{cat}
+        .ticket-card__header
+          h3.ticket-card__title
+            a(href=`/offers/${offer.id}`) #{offer.title}
+          p.ticket-card__price
+            span.js-sum #{offer.sum}
+            |  ₽
+        if !js
+            .ticket-card__desc
+              p #{offer.description}
+      if js
+          button.ticket-card__del.js-delete(type="button") Удалить

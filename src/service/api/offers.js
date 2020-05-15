@@ -115,4 +115,19 @@ module.exports = (app, offerService, commentService) => {
 
     res.status(201).send(created);
   });
+
+  router.get(`/category/:category`, (req, res) => {
+    const {category} = req.params;
+
+    const offers = offerService.find((offer) => {
+      return offer.category.some((cat) => cat === category);
+    });
+
+    if (!offers) {
+      res.status(404).send(`Not found`);
+      return;
+    }
+
+    res.status(200).send(offers);
+  });
 };

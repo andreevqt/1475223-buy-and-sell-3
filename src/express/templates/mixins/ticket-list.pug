@@ -1,0 +1,13 @@
+mixin ticket-list(title, hiddenTitle, offers, pagination=false)
+  section.tickets-list
+    h2.visually-hidden #{hiddenTitle}
+    .tickets-list__wrapper
+      .tickets-list__header
+        p.tickets-list__title #{title} 
+        a.tickets-list__link(href="#") Ещё 25 
+      ul
+        each offer in offers
+          +ticket-list-item(offer)(class="tickets-list__item")
+      if (pagination)
+        .tickets-list__pagination
+          +pagination()

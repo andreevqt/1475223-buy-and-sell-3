@@ -23,14 +23,14 @@ const {
 const getRndField = (arr) => arr[randomInt(0, arr.length - 1)];
 
 const generatePicture = () => {
-  const idx = randomInt(0, MAX_IMAGE_IDX);
+  const idx = randomInt(1, MAX_IMAGE_IDX);
   return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
 };
 
 const generateComments = (comments) => {
   return shuffle(comments)
-    .slice(0, randomInt(1, comments.length)).
-    map((comment) => ({
+    .slice(0, randomInt(1, comments.length))
+    .map((comment) => ({
       id: nanoid(ID_LEN),
       text: comment
     }));

@@ -17,5 +17,11 @@ build/
 # mocks
 mocks.json
 
-#logs
-logs/*.log
+# logs
+logs/*
+
+# upload
+uploads/*
+
+# thumbnails
+*.thumbnail*

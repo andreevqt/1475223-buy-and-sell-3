@@ -1,7 +1,7 @@
 extends ../layouts/error/layout
 block variables
-  - var bodyClass = `body-server`
-  - var htmlClass = `html-server`
+  - let bodyClass = `body-server`
+  - let htmlClass = `html-server`
 
 block content
   section.error
@@ -14,8 +14,9 @@ block content
         a(href="/offers/add") Новая публикация
       li.error__item
         a(href="/") Главная страница
-    form.error__search.search.search--small(method="get" action="#" autocomplete="off")
-      input(type="search" name="search" placeholder="Поиск" aria-label="Поиск")
+    include ../partials/search
+    form.error__search.search.search--small(method="get" action="/search" autocomplete="off")
+      input(type="search" name="query" placeholder="Поиск" aria-label="Поиск")
       .search__icon
       .search__close-btn
     a.error__logo.logo(href="main.html")

@@ -3,11 +3,12 @@
 
 const request = require(`supertest`);
 const {API_PREFIX} = require(`../constants`);
-const _ = require(`lodash`);
 const {
   app,
   api: {searchService}
 } = require(`../testSetup`);
+
+let api = app;
 
 const offers = [
   {title: `Продам коллекцию журналов «Огонёк».`},
@@ -16,7 +17,7 @@ const offers = [
 ];
 
 describe(`Search api endpoint`, () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     searchService.offers = offers;
   });
 
@@ -24,7 +25,7 @@ describe(`Search api endpoint`, () => {
     test(`Should filter offers by title`, async () => {
       const query = `ПрОдАМ`;
 
-      const response = await request(app)
+      const response = await request(api)
         .get(`${API_PREFIX}/search`)
         .query({query})
         .expect(200);
@@ -44,14 +45,14 @@ describe(`Search api endpoint`, () => {
     test(`Should return 404 error and empty array if nothing is found`, async () => {
       const query = `asdsds`;
 
-      const response = await request(app)
+      const response = await request(api)
         .get(`${API_PREFIX}/search`)
         .query({query});
 
       expect(response.status).toBe(404);
 
       const results = response.body;
-      expect(_.isArray(results)).toBe(true);
+      expect(Array.isArray(results)).toBe(true);
       expect(results.length).toBe(0);
     });
   });

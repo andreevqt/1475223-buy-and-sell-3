@@ -18,7 +18,22 @@ class OfferService extends BaseService {
   }
 
   create(attrs) {
-    const newOffer = {id: nanoid(ID_LEN), comments: [], ...attrs};
+    const defaults = {
+      id: nanoid(ID_LEN),
+      comments: [],
+      category: [],
+      sum: null,
+      picture: null,
+      description: null,
+      title: null,
+      type: `offer`
+    };
+
+    if (!Array.isArray(attrs.category)) {
+      attrs.category = [attrs.category];
+    }
+
+    const newOffer = {...defaults, ...attrs};
     this._offers = [
       ...this._offers,
       newOffer

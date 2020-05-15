@@ -14,6 +14,7 @@ const server = async (manager, args) => {
   const port = args[0] || config.API_SERVER_PORT;
 
   const app = express();
+  app.use(express.json());
   app.use(logRequests);
 
   // load data
