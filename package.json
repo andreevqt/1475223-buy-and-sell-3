@@ -4,10 +4,12 @@
   "description": "* Студент: [Александр Андреев](https://up.htmlacademy.ru/nodejs/3/user/1475223). * Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).",
   "main": "./src/service/service.js",
   "scripts": {
-    "test": "npm run eslint",
+    "test": "npm run test::rest",
+    "test::rest": "jest",
     "eslint": "eslint --ext .js src/",
     "generate": "node ./src/service/service.js --generate 20",
-    "server": "nodemon ./src/service/service.js --server 3000",
+    "start": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000",
+    "start::debug": "cross-env LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start-front-server": "nodemon ./src/express"
   },
   "repository": {
@@ -23,13 +25,19 @@
   "homepage": "https://github.com/qprquo/1475223-buy-and-sell-3#readme",
   "devDependencies": {
     "eslint": "6.8.0",
-    "eslint-config-htmlacademy": "0.5.2"
+    "eslint-config-htmlacademy": "0.5.2",
+    "jest": "26.0.1",
+    "pino-pretty": "4.0.0",
+    "supertest": "4.0.2"
   },
   "dependencies": {
-    "nodemon": "2.0.3",
-    "nanoid": "3.1.6",
     "chalk": "4.0.0",
+    "cross-env": "7.0.2",
+    "dotenv": "8.2.0",
     "express": "4.17.1",
+    "nanoid": "3.1.6",
+    "nodemon": "2.0.3",
+    "pino": "6.2.1",
     "pug": "2.0.4"
   }
 }

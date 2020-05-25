@@ -30,6 +30,7 @@ module.exports = (app, offerService, commentService) => {
     const offer = offerService.findOne(offerId);
     if (!offer) {
       res.status(404).send(`Not found`);
+      return;
     }
     res.status(200).json(offer);
   });
@@ -46,6 +47,7 @@ module.exports = (app, offerService, commentService) => {
     const isExists = offerService.findOne(offerId);
     if (!isExists) {
       res.status(404).send(`Not found`);
+      return;
     }
 
     const updated = offerService.update(offerId, offer);
@@ -58,6 +60,7 @@ module.exports = (app, offerService, commentService) => {
     const offer = offerService.findOne(offerId);
     if (!offer) {
       res.status(404).send(`Not found`);
+      return;
     }
 
     offerService.delete(offerId);
@@ -69,6 +72,7 @@ module.exports = (app, offerService, commentService) => {
     const comments = commentService.findAll(offerId);
     if (!comments) {
       res.status(404).send(`Not found`);
+      return;
     }
 
     res.status(200).json(comments);
@@ -80,6 +84,7 @@ module.exports = (app, offerService, commentService) => {
 
     if (!deleted) {
       res.status(404).send(`Not found`);
+      return;
     }
 
     res.status(200).json(deleted);
@@ -92,6 +97,7 @@ module.exports = (app, offerService, commentService) => {
     const updated = commentService.update(offerId, commentId, comment);
     if (!updated) {
       res.status(404).send(`Not found`);
+      return;
     }
 
     res.status(200).send(updated);
@@ -104,6 +110,7 @@ module.exports = (app, offerService, commentService) => {
     const created = commentService.create(offerId, comment);
     if (!created) {
       res.status(404).send(`Not found`);
+      return;
     }
 
     res.status(201).send(created);

@@ -5,7 +5,7 @@ GET http://localhost:3000/api/categories HTTP/1.1
 ###
 
 # Поиск
-GET http://localhost:3000/api/search?query=Куплю HTTP/1.1
+GET http://localhost:3000/api/search?query=Продам HTTP/1.1
 
 ###
 
