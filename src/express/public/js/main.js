@@ -1,9 +1,9 @@
 'use strict';
 
-(function() {
+(function () {
   var deletEls = document.querySelectorAll('.js-delete');
   for (var i = 0; i < deletEls.length; i++) {
-    deletEls[i].addEventListener('click', function() {
+    deletEls[i].addEventListener('click', function () {
       var card = this.closest('.js-card');
       card.parentNode.removeChild(card);
 
@@ -65,27 +65,38 @@
     var selects = document.querySelectorAll('.js-multiple-select');
     for (var i = 0; i < selects.length; i++) {
       var placeholder = selects[i].getAttribute('data-label');
+      const selectedValues = Array.from(selects[i].querySelectorAll('.js-multiple-select option'))
+        .map(function (el) {
+          return {
+            value: el.getAttribute('value'),
+            text: el.innerText,
+            selected: el.hasAttribute('selected'),
+          };
+        });
+
       var SS = new Selectr(selects[i], {
         searchable: false,
         multiple: true,
         width: 222,
-        placeholder: placeholder
+        placeholder: placeholder,
+        data: selectedValues
       });
+
       var selection = Selectr.prototype.select,
         deselection = Selectr.prototype.deselect;
       var ours = document.createElement('div');
       ours.className = SS.selected.className;
       SS.selected.className += ' selectr-selected--hidden';
-      SS.selected.parentNode.insertBefore(ours,SS.selected);
-      var updateOurs = function(){
+      SS.selected.parentNode.insertBefore(ours, SS.selected);
+      var updateOurs = function () {
         ours.innerText = SS.selected.innerText.trim().replace(/\n/g, ', ') || placeholder;
       };
-      Selectr.prototype.select = function(){
+      Selectr.prototype.select = function () {
         selection.apply(this, arguments);
         updateOurs();
       };
 
-      Selectr.prototype.deselect = function(){
+      Selectr.prototype.deselect = function () {
         deselection.apply(this, arguments);
         updateOurs();
       };
@@ -94,7 +105,7 @@
 
     var priceField = form.querySelector('.js-price');
     if (priceField) {
-      priceField.addEventListener('keydown', function(e) {
+      priceField.addEventListener('keydown', function (e) {
         if (window.event.keyCode >= 65 && window.event.keyCode <= 90 || window.event.keyCode === 189 || window.event.keyCode === 188) {
           e.preventDefault();
         }

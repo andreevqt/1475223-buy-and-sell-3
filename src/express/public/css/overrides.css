@@ -1,0 +1,4 @@
+.ticket-card__title {
+  max-height: 34px;
+  overflow: hidden;
+}

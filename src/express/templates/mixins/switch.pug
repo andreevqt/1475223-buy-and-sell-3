@@ -1,0 +1,5 @@
+mixin switch(name, items, value)
+  each item, idx in items
+    .switch__item
+      input.visually-hidden(id=`buy-field-${idx}`, type="radio", name=name, value=item.value, checked=(item.value === value))
+      label.switch__button(for=`buy-field-${idx}`) #{item.label}

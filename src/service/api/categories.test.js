@@ -9,6 +9,8 @@ const {
   api: {categoryService}
 } = require(`../testSetup`);
 
+let api = app;
+
 const categories = [
   `Журналы`,
   `Игры`,
@@ -18,14 +20,14 @@ const categories = [
 ];
 
 describe(`Categories api endpoint`, () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     const offers = categories.map((category) => ({category: [category]}));
     categoryService.offers = offers;
   });
 
   describe(`GET ${API_PREFIX}/categories`, () => {
     test(`Should return categories list with proper object structure`, async () => {
-      const response = await request(app).get(`${API_PREFIX}/categories`);
+      const response = await request(api).get(`${API_PREFIX}/categories`);
       const results = response.body;
 
       expect(Array.isArray(results)).toBe(true);

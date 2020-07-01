@@ -11,4 +11,15 @@ module.exports = (app, service) => {
     const categories = service.findAll();
     res.status(200).json(categories);
   });
+
+  router.get(`/:categoryId`, (req, res) => {
+    const categoryId = +req.params.categoryId;
+    const category = service.findOne(categoryId);
+    if (!category) {
+      res.status(404).send(`Not found`);
+      return;
+    }
+
+    res.status(200).send(category);
+  });
 };
