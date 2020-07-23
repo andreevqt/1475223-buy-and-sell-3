@@ -17,11 +17,11 @@ build/
 # mocks
 mocks.json
 
-# logs
-logs/*
-
 # upload
 uploads/*
 
 # thumbnails
 *.thumbnail*
+
+# rest client
+*.http

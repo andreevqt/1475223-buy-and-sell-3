@@ -8,10 +8,10 @@
     "test::rest": "jest",
     "eslint": "eslint --ext .js src/",
     "generate": "node ./src/service/service.js --generate 20",
-    "start": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 > ./src/service/logs/server.log",
-    "start::debug": "cross-env LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000 | pino-pretty",
-    "start-front-server": "nodemon ./src/express > ./src/express/logs/front.log",
-    "start-front-server::debug": "cross-env LOG_LEVEL=debug nodemon ./src/express | pino-pretty"
+    "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
+    "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
+    "start-front-server": "cross-env LOG_LEVEL=error nodemon ./src/express > ./logs/app.log",
+    "start-front-server::debug": "cross-env LOG_LEVEL=info nodemon ./src/express | pino-pretty"
   },
   "repository": {
     "type": "git",
