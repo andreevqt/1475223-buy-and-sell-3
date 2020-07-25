@@ -12,5 +12,5 @@ module.exports.API_SERVER_DEFAULT_PORT = 3000;
 
 module.exports.TYPES = [
   `buy`,
-  `sale`
+  `sell`
 ];

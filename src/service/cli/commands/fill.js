@@ -42,7 +42,7 @@ const generatePicture = () => {
 const makeCommentsQuery = (comments) => {
   return `-- comments
 INSERT INTO public.comments (text, author_id, offer_id) VALUES 
-  ${comments.map((comment) => `('${comment.text}', ${comment.authorId}, ${comment.offerId})`).join(`,\n\t`)};\n\n`
+  ${comments.map((comment) => `('${comment.text}', ${comment.author.id}, ${comment.offer.id})`).join(`,\n\t`)};\n\n`
 };
 
 const makeCategoriesQuery = (categories) => {
@@ -92,8 +92,8 @@ const generateComment = (id, text, author, offer) => {
   return {
     id,
     text,
-    authorId: author.id,
-    offerId: offer.id
+    author,
+    offer
   };
 };
 
