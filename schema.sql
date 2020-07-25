@@ -79,6 +79,7 @@ DROP TABLE IF EXISTS public.comments;
 CREATE TABLE public.comments (
     id bigint NOT NULL,
     text text,
+    created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     author_id bigint NOT NULL,
     offer_id bigint NOT NULL
 );
