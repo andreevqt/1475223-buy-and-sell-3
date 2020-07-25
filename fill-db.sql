@@ -1,666 +1,217 @@
---users
-INSERT INTO public.users (name, email, avatar, password)
-VALUES ('Евгений Cмирнов', 'evgen2002@ya.ru', '/img/avatar02.jpg', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
-
-INSERT INTO public.users (name, email, avatar, password)
-VALUES ('Василий Уткин', 'vas12121@ya.ru', '/img/avatar.jpg', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
-
+-- users
+INSERT INTO public.users (name, email, avatar, password) VALUES
+  ('Евгений Cмирнов', 'evgen2002@ya.ru', '/img/avatar02.jpg', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5'),
+	('Василий Уткин', 'vas12121@ya.ru', '/img/avatar.jpg', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5');
 
 -- offers
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам отличную подборку фильмов на VHS.', 'Кому нужен этот новый телефон, если тут такое... Мой дед не мог её сломать.', 'offer', '/img/item06.jpg', 84261, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам новую приставку Sony Playstation 5.', 'При покупке с меня бесплатная доставка в черте города.', 'offer', '/img/item02.jpg', 33307, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам новую приставку Sony Playstation 5.', 'Не пытайтесь торговаться. Цену вещам я знаю. Пользовались бережно и только по большим праздникам. Продаю с болью в сердце... Кажется, что это хрупкая вещь. Мой дед не мог её сломать.', 'sale', '/img/item15.jpg', 98728, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам новую приставку Sony Playstation 5.', 'Бонусом отдам все аксессуары. Пользовались бережно и только по большим праздникам. Мой дед не мог её сломать.', 'sale', '/img/item08.jpg', 21368, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам отличную подборку фильмов на VHS.', 'При покупке с меня бесплатная доставка в черте города.', 'offer', '/img/item13.jpg', 33755, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Куплю породистого кота.', 'Товар в отличном состоянии. Кому нужен этот новый телефон, если тут такое... Две страницы заляпаны свежим кофе. Это настоящая находка для коллекционера!', 'offer', '/img/item11.jpg', 71587, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам коллекцию журналов «Огонёк».', 'Товар в отличном состоянии. Мой дед не мог её сломать. Даю недельную гарантию.', 'sale', '/img/item09.jpg', 27030, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Отдам в хорошие руки подшивку «Мурзилка».', 'Таких предложений больше нет!', 'offer', '/img/item16.jpg', 82249, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам новую приставку Sony Playstation 5.', 'Даю недельную гарантию.', 'offer', '/img/item06.jpg', 6808, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Куплю породистого кота.', 'Кажется, что это хрупкая вещь. Пользовались бережно и только по большим праздникам. При покупке с меня бесплатная доставка в черте города.', 'sale', '/img/item03.jpg', 40170, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Куплю антиквариат.', 'При покупке с меня бесплатная доставка в черте города. Кажется, что это хрупкая вещь. Товар в отличном состоянии. Продаю с болью в сердце...', 'offer', '/img/item07.jpg', 80804, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Отдам в хорошие руки подшивку «Мурзилка».', 'Бонусом отдам все аксессуары.', 'offer', '/img/item12.jpg', 92266, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам книги Стивена Кинга.', 'Это настоящая находка для коллекционера!', 'offer', '/img/item05.jpg', 73831, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам отличную подборку фильмов на VHS.', 'Это настоящая находка для коллекционера!', 'offer', '/img/item11.jpg', 67805, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Куплю антиквариат.', 'Если найдёте дешевле — сброшу цену. Мой дед не мог её сломать. Не пытайтесь торговаться. Цену вещам я знаю. При покупке с меня бесплатная доставка в черте города. Пользовались бережно и только по большим праздникам.', 'offer', '/img/item12.jpg', 10024, 2);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Отдам в хорошие руки подшивку «Мурзилка».', 'Товар в отличном состоянии.', 'offer', '/img/item09.jpg', 19266, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам советскую посуду. Почти не разбита.', 'Таких предложений больше нет! Если товар не понравится — верну всё до последней копейки. Продаю с болью в сердце... Пользовались бережно и только по большим праздникам.', 'sale', '/img/item04.jpg', 32480, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам отличную подборку фильмов на VHS.', 'Не пытайтесь торговаться. Цену вещам я знаю. Кому нужен этот новый телефон, если тут такое... Это настоящая находка для коллекционера! Кажется, что это хрупкая вещь. Пользовались бережно и только по большим праздникам.', 'sale', '/img/item11.jpg', 71382, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Продам отличную подборку фильмов на VHS.', 'Не пытайтесь торговаться. Цену вещам я знаю. Пользовались бережно и только по большим праздникам. Если найдёте дешевле — сброшу цену. Бонусом отдам все аксессуары.', 'offer', '/img/item04.jpg', 14779, 1);
-
-INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('Куплю детские санки.', 'Товар в отличном состоянии.', 'offer', '/img/item03.jpg', 45910, 2);
-
+INSERT INTO public.offers (title, description, type, picture, sum, author_id) VALUES
+  ('Продам книги Стивена Кинга.', 'Бонусом отдам все аксессуары.', 'sale', '/img/item01.jpg', 10113, 2),
+	('Куплю антиквариат.', 'Даю недельную гарантию. При покупке с меня бесплатная доставка в черте города.', 'sale', '/img/item08.jpg', 14266, 1),
+	('Куплю детские санки.', 'Кому нужен этот новый телефон, если тут такое... Даю недельную гарантию. Таких предложений больше нет! Не пытайтесь торговаться. Цену вещам я знаю. Две страницы заляпаны свежим кофе.', 'offer', '/img/item09.jpg', 38880, 2),
+	('Куплю породистого кота.', 'Не пытайтесь торговаться. Цену вещам я знаю.', 'offer', '/img/item16.jpg', 36136, 2),
+	('Куплю детские санки.', 'Мой дед не мог её сломать.', 'sale', '/img/item01.jpg', 96827, 1),
+	('Куплю детские санки.', 'Кажется, что это хрупкая вещь. Не пытайтесь торговаться. Цену вещам я знаю. Таких предложений больше нет! Две страницы заляпаны свежим кофе. Если найдёте дешевле — сброшу цену.', 'offer', '/img/item08.jpg', 79307, 1),
+	('Куплю антиквариат.', 'Если найдёте дешевле — сброшу цену. Если товар не понравится — верну всё до последней копейки. Кому нужен этот новый телефон, если тут такое... Кажется, что это хрупкая вещь.', 'offer', '/img/item14.jpg', 39668, 1),
+	('Продам коллекцию журналов «Огонёк».', 'Пользовались бережно и только по большим праздникам. Даю недельную гарантию. Таких предложений больше нет!', 'sale', '/img/item01.jpg', 7339, 2),
+	('Куплю породистого кота.', 'Пользовались бережно и только по большим праздникам. Бонусом отдам все аксессуары. Не пытайтесь торговаться. Цену вещам я знаю.', 'sale', '/img/item08.jpg', 25604, 1),
+	('Куплю детские санки.', 'Бонусом отдам все аксессуары. Продаю с болью в сердце... Две страницы заляпаны свежим кофе. Товар в отличном состоянии.', 'sale', '/img/item11.jpg', 36358, 2),
+	('Продам книги Стивена Кинга.', 'Это настоящая находка для коллекционера! Если товар не понравится — верну всё до последней копейки.', 'offer', '/img/item15.jpg', 93569, 1),
+	('Продам коллекцию журналов «Огонёк».', 'Кажется, что это хрупкая вещь. Если товар не понравится — верну всё до последней копейки. Продаю с болью в сердце...', 'offer', '/img/item06.jpg', 63025, 1),
+	('Продам новую приставку Sony Playstation 5.', 'Даю недельную гарантию. Две страницы заляпаны свежим кофе. Мой дед не мог её сломать.', 'offer', '/img/item11.jpg', 23984, 2),
+	('Продам коллекцию журналов «Огонёк».', 'Пользовались бережно и только по большим праздникам. Кому нужен этот новый телефон, если тут такое...', 'offer', '/img/item02.jpg', 33208, 1),
+	('Куплю детские санки.', 'Кажется, что это хрупкая вещь. При покупке с меня бесплатная доставка в черте города. Продаю с болью в сердце... Это настоящая находка для коллекционера! Даю недельную гарантию.', 'sale', '/img/item15.jpg', 33249, 1),
+	('Куплю породистого кота.', 'Даю недельную гарантию. Две страницы заляпаны свежим кофе. Не пытайтесь торговаться. Цену вещам я знаю. Кажется, что это хрупкая вещь.', 'offer', '/img/item04.jpg', 89896, 1),
+	('Продам советскую посуду. Почти не разбита.', 'Таких предложений больше нет!', 'sale', '/img/item06.jpg', 19763, 2),
+	('Куплю детские санки.', 'Товар в отличном состоянии.', 'sale', '/img/item04.jpg', 89401, 1),
+	('Продам книги Стивена Кинга.', 'Если найдёте дешевле — сброшу цену. Не пытайтесь торговаться. Цену вещам я знаю.', 'sale', '/img/item05.jpg', 34511, 2),
+	('Продам советскую посуду. Почти не разбита.', 'Бонусом отдам все аксессуары. Пользовались бережно и только по большим праздникам. Таких предложений больше нет!', 'sale', '/img/item04.jpg', 92974, 1);
 
 -- categories
-INSERT INTO public.categories (name)
-VALUES ('Разное');
+INSERT INTO public.categories (name) VALUES
+  ('Посуда'),
+	('Животные'),
+	('Игры'),
+	('Разное'),
+	('Книги'),
+	('Журналы');
 
-INSERT INTO public.categories (name)
-VALUES ('Книги');
-
-INSERT INTO public.categories (name)
-VALUES ('Игры');
-
-INSERT INTO public.categories (name)
-VALUES ('Посуда');
-
-INSERT INTO public.categories (name)
-VALUES ('Журналы');
-
-INSERT INTO public.categories (name)
-VALUES ('Животные');
-
+-- offers_categories
+INSERT INTO public.offers_categories (offer_id, category_id) VALUES
+  (1, 4),
+	(2, 4),
+	(2, 3),
+	(2, 6),
+	(2, 2),
+	(2, 5),
+	(2, 1),
+	(3, 2),
+	(3, 1),
+	(3, 4),
+	(3, 6),
+	(3, 3),
+	(3, 5),
+	(4, 6),
+	(4, 4),
+	(4, 3),
+	(4, 5),
+	(4, 1),
+	(5, 6),
+	(5, 2),
+	(5, 1),
+	(5, 4),
+	(5, 5),
+	(5, 3),
+	(6, 1),
+	(6, 2),
+	(6, 4),
+	(6, 6),
+	(7, 5),
+	(7, 6),
+	(7, 2),
+	(7, 1),
+	(7, 4),
+	(8, 3),
+	(8, 6),
+	(9, 4),
+	(10, 6),
+	(10, 3),
+	(10, 2),
+	(10, 4),
+	(11, 6),
+	(11, 1),
+	(11, 3),
+	(12, 5),
+	(12, 6),
+	(12, 4),
+	(12, 1),
+	(13, 2),
+	(13, 5),
+	(14, 1),
+	(14, 5),
+	(14, 3),
+	(14, 4),
+	(14, 6),
+	(14, 2),
+	(15, 6),
+	(15, 3),
+	(16, 4),
+	(16, 3),
+	(17, 3),
+	(17, 6),
+	(18, 6),
+	(18, 4),
+	(18, 3),
+	(18, 1),
+	(18, 2),
+	(18, 5),
+	(19, 1),
+	(19, 4),
+	(19, 3),
+	(19, 5),
+	(20, 3);
 
 -- comments
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 1, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 2, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 1, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 1);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 2, 2);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 3);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 2, 3);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 1, 3);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 2, 3);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 3);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 2, 4);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 1, 4);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 4);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 2, 4);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 4);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 1, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 1, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 1, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 2, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 5);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 6);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 1, 7);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 8);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 8);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 2, 8);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 1, 8);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 2, 9);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 9);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 2, 9);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 9);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 9);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 2, 9);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 1, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 1, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 10);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 1, 11);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 11);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 11);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 2, 11);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 2, 11);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 1, 11);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 1, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 1, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 1, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 2, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 2, 12);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 2, 13);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 13);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 13);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 13);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 1, 13);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 2, 14);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 1, 15);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 15);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 15);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 15);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 2, 15);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 2, 15);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 16);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 2, 16);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 2, 16);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 2, 16);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 2, 17);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 2, 17);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 17);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 17);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 18);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 1, 19);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 19);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 2, 19);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 1, 19);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Вы что?! В магазине дешевле.', 1, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Совсем немного...', 1, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Оплата наличными или перевод на карту?', 1, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Почему в таком ужасном состоянии?', 2, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('С чем связана продажа? Почему так дешёво?', 2, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Продаю в связи с переездом. Отрываю от сердца.', 1, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А где блок питания?', 1, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('Неплохо, но дорого', 1, 20);
-
-INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('А сколько игр в комплекте?', 2, 20);
-
-
--- categories_offers
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (1, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (1, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (1, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (1, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (1, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (2, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (2, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (2, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (2, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (2, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (3, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (4, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (4, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (4, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (5, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (5, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (5, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (5, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (5, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (6, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (6, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (6, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (6, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (7, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (8, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (8, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (9, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (9, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (9, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (9, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (9, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (9, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (10, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (10, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (10, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (10, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (10, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (10, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (11, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (11, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (11, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (11, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (12, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (12, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (12, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (12, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (12, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (13, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (13, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (13, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (13, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (13, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (14, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (14, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (14, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (14, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (14, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (15, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (15, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (15, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (15, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (16, 5);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (16, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (16, 2);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (17, 4);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (17, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (17, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (18, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (19, 6);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (19, 1);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (19, 3);
-
-INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (20, 2);
+INSERT INTO public.comments (text, author_id, offer_id) VALUES 
+  ('А где блок питания?', 1, 1),
+	('Продаю в связи с переездом. Отрываю от сердца.', 1, 1),
+	('Вы что?! В магазине дешевле.', 2, 1),
+	('Неплохо, но дорого', 2, 1),
+	('Совсем немного...', 1, 1),
+	('Почему в таком ужасном состоянии?', 2, 1),
+	('Оплата наличными или перевод на карту?', 1, 1),
+	('А сколько игр в комплекте?', 2, 1),
+	('С чем связана продажа? Почему так дешёво?', 2, 1),
+	('Неплохо, но дорого', 1, 2),
+	('А сколько игр в комплекте?', 1, 3),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 3),
+	('Неплохо, но дорого', 1, 3),
+	('Вы что?! В магазине дешевле.', 2, 3),
+	('Совсем немного...', 2, 3),
+	('А где блок питания?', 2, 3),
+	('Оплата наличными или перевод на карту?', 1, 3),
+	('Почему в таком ужасном состоянии?', 2, 3),
+	('С чем связана продажа? Почему так дешёво?', 1, 4),
+	('Оплата наличными или перевод на карту?', 2, 4),
+	('А где блок питания?', 2, 4),
+	('Вы что?! В магазине дешевле.', 1, 5),
+	('Совсем немного...', 2, 5),
+	('Оплата наличными или перевод на карту?', 1, 5),
+	('А сколько игр в комплекте?', 1, 5),
+	('Почему в таком ужасном состоянии?', 1, 6),
+	('Неплохо, но дорого', 2, 6),
+	('А где блок питания?', 2, 6),
+	('Оплата наличными или перевод на карту?', 1, 6),
+	('Вы что?! В магазине дешевле.', 2, 6),
+	('А сколько игр в комплекте?', 1, 7),
+	('Оплата наличными или перевод на карту?', 1, 7),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 7),
+	('Неплохо, но дорого', 2, 7),
+	('А где блок питания?', 1, 7),
+	('Почему в таком ужасном состоянии?', 2, 7),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 8),
+	('Почему в таком ужасном состоянии?', 2, 8),
+	('Оплата наличными или перевод на карту?', 2, 8),
+	('Неплохо, но дорого', 1, 8),
+	('Вы что?! В магазине дешевле.', 1, 8),
+	('Оплата наличными или перевод на карту?', 1, 9),
+	('Совсем немного...', 1, 9),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 9),
+	('Почему в таком ужасном состоянии?', 2, 9),
+	('С чем связана продажа? Почему так дешёво?', 2, 10),
+	('А где блок питания?', 1, 10),
+	('А сколько игр в комплекте?', 1, 10),
+	('Почему в таком ужасном состоянии?', 2, 10),
+	('Совсем немного...', 2, 10),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 10),
+	('Неплохо, но дорого', 2, 10),
+	('Оплата наличными или перевод на карту?', 2, 11),
+	('Вы что?! В магазине дешевле.', 2, 11),
+	('А где блок питания?', 2, 11),
+	('Совсем немного...', 1, 11),
+	('Неплохо, но дорого', 2, 11),
+	('Почему в таком ужасном состоянии?', 2, 11),
+	('С чем связана продажа? Почему так дешёво?', 2, 11),
+	('А сколько игр в комплекте?', 1, 11),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 11),
+	('А где блок питания?', 2, 12),
+	('Почему в таком ужасном состоянии?', 2, 12),
+	('С чем связана продажа? Почему так дешёво?', 2, 12),
+	('Оплата наличными или перевод на карту?', 1, 12),
+	('А сколько игр в комплекте?', 2, 12),
+	('Вы что?! В магазине дешевле.', 2, 12),
+	('Совсем немного...', 1, 12),
+	('Совсем немного...', 1, 13),
+	('А сколько игр в комплекте?', 2, 13),
+	('А где блок питания?', 1, 13),
+	('Вы что?! В магазине дешевле.', 1, 13),
+	('Почему в таком ужасном состоянии?', 2, 13),
+	('Оплата наличными или перевод на карту?', 2, 13),
+	('Неплохо, но дорого', 2, 13),
+	('Продаю в связи с переездом. Отрываю от сердца.', 1, 13),
+	('Вы что?! В магазине дешевле.', 2, 14),
+	('Неплохо, но дорого', 1, 14),
+	('А где блок питания?', 1, 15),
+	('Вы что?! В магазине дешевле.', 1, 16),
+	('С чем связана продажа? Почему так дешёво?', 2, 17),
+	('Почему в таком ужасном состоянии?', 2, 17),
+	('Оплата наличными или перевод на карту?', 1, 17),
+	('Вы что?! В магазине дешевле.', 1, 18),
+	('С чем связана продажа? Почему так дешёво?', 1, 18),
+	('Оплата наличными или перевод на карту?', 1, 18),
+	('Неплохо, но дорого', 2, 18),
+	('Продаю в связи с переездом. Отрываю от сердца.', 2, 18),
+	('А сколько игр в комплекте?', 1, 18),
+	('А где блок питания?', 1, 18),
+	('Совсем немного...', 2, 18),
+	('Совсем немного...', 2, 19),
+	('Неплохо, но дорого', 2, 19),
+	('Оплата наличными или перевод на карту?', 1, 19),
+	('Вы что?! В магазине дешевле.', 2, 19),
+	('А сколько игр в комплекте?', 1, 19),
+	('Продаю в связи с переездом. Отрываю от сердца.', 1, 19),
+	('Продаю в связи с переездом. Отрываю от сердца.', 1, 20),
+	('Почему в таком ужасном состоянии?', 1, 20),
+	('Оплата наличными или перевод на карту?', 1, 20),
+	('А сколько игр в комплекте?', 1, 20),
+	('Неплохо, но дорого', 1, 20);
 

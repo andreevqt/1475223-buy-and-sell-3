@@ -39,29 +39,34 @@ const generatePicture = () => {
   return `/img/item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
 };
 
-const makeCommentQuery = (comment) => {
-  return `INSERT INTO public.comments (text, author_id, offer_id)
-VALUES ('${comment.text}', ${comment.authorId}, ${comment.offerId});\n\n`;
+const makeCommentsQuery = (comments) => {
+  return `-- comments
+INSERT INTO public.comments (text, author_id, offer_id) VALUES 
+  ${comments.map((comment) => `('${comment.text}', ${comment.authorId}, ${comment.offerId})`).join(`,\n\t`)};\n\n`
 };
 
-const makeCategoryQuery = (category) => {
-  return `INSERT INTO public.categories (name)
-VALUES ('${category.name}');\n\n`;
+const makeCategoriesQuery = (categories) => {
+  return `-- categories
+INSERT INTO public.categories (name) VALUES
+  ${categories.map((category) => `('${category.name}')`).join(`,\n\t`)};\n\n`;
 };
 
-const makeOfferQuery = (offer) => {
-  return `INSERT INTO public.offers (title, description, type, picture, sum, author_id)
-VALUES ('${offer.title}', '${offer.description}', '${offer.type}', '${offer.picture}', ${offer.sum}, ${offer.author.id});\n\n`;
+const makeOffersQuery = (offers) => {
+  return `-- offers
+INSERT INTO public.offers (title, description, type, picture, sum, author_id) VALUES
+  ${offers.map((offer) => `('${offer.title}', '${offer.description}', '${offer.type}', '${offer.picture}', ${offer.sum}, ${offer.author.id})`).join(`,\n\t`)};\n\n`
 };
 
-const makeOffersCategoriesQuery = (item) => {
-  return `INSERT INTO public.offers_categories (offer_id, category_id)
-VALUES (${item.offer.id}, ${item.category.id});\n\n`;
+const makeOffersCategoriesQuery = (items) => {
+  return `-- offers_categories
+INSERT INTO public.offers_categories (offer_id, category_id) VALUES
+  ${items.map((item) => `(${item.offer.id}, ${item.category.id})`).join(`,\n\t`)};\n\n`
 };
 
-const makeUserQuery = (user) => {
-  return `INSERT INTO public.users (name, email, avatar, password)
-VALUES ('${user.name}', '${user.email}', '${user.avatar}', '${user.password}');\n\n`;
+const makeUsersQuery = (users) => {
+  return `-- users
+INSERT INTO public.users (name, email, avatar, password) VALUES
+  ${users.map((user) => `('${user.name}', '${user.email}', '${user.avatar}', '${user.password}')`).join(`,\n\t`)};\n\n`;
 };
 
 const generateOffer = (id, titles, sentences, users) => {
@@ -93,37 +98,14 @@ const generateComment = (id, text, author, offer) => {
 };
 
 const writeFile = (outDir, data) => {
-  let query = ``;
   const {offers, categories, comments, categoriesForOffers, users} = data;
+  let query = ``;
 
-  query += `--users\n`;
-  users.forEach((user) => {
-    query += makeUserQuery(user);
-  });
-  query += `\n`;
-
-  query += `-- offers\n`;
-  offers.forEach((offer) => {
-    query += makeOfferQuery(offer);
-  });
-  query += `\n`;
-
-  query += `-- categories\n`;
-  categories.forEach((category) => {
-    query += makeCategoryQuery(category);
-  });
-  query += `\n`;
-
-  query += `-- comments\n`;
-  comments.forEach((comment) => {
-    query += makeCommentQuery(comment);
-  });
-  query += `\n`;
-
-  query += `-- categories_offers\n`;
-  categoriesForOffers.forEach((item) => {
-    query += makeOffersCategoriesQuery(item);
-  });
+  query += makeUsersQuery(users);
+  query += makeOffersQuery(offers);
+  query += makeCategoriesQuery(categories);
+  query += makeOffersCategoriesQuery(categoriesForOffers);
+  query += makeCommentsQuery(comments)
 
   return fs.mkdir(outDir, {recursive: true})
     .then(() => fs.writeFile(`${outDir}/fill-db.sql`, query));
