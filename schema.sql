@@ -16,15 +16,15 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE IF EXISTS buy_and_sell;
+-- DROP DATABASE IF EXISTS buy_and_sell;
 --
 -- Name: buy_and_sell; Type: DATABASE; Schema: -; Owner: -
 --
 
-CREATE DATABASE buy_and_sell WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
+-- CREATE DATABASE buy_and_sell WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
 
 
-\connect buy_and_sell
+/* \connect buy_and_sell
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -40,11 +40,12 @@ SET row_security = off;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
-
+ */
 --
 -- Name: categories; Type: TABLE; Schema: public; Owner: -
 --
 
+DROP TABLE IF EXISTS public.categories CASCADE;
 CREATE TABLE public.categories (
     id bigint NOT NULL,
     name character varying(100)
@@ -74,6 +75,7 @@ ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 -- Name: comments; Type: TABLE; Schema: public; Owner: -
 --
 
+DROP TABLE IF EXISTS public.comments;
 CREATE TABLE public.comments (
     id bigint NOT NULL,
     text text,
@@ -143,11 +145,14 @@ ALTER SEQUENCE public.comments_offer_id_seq OWNED BY public.comments.offer_id;
 -- Name: offers; Type: TABLE; Schema: public; Owner: -
 --
 
+DROP TABLE IF EXISTS public.offers CASCADE;
 CREATE TABLE public.offers (
     id bigint NOT NULL,
     title character varying(100),
     description character varying(1000),
+    type character varying(100),
     sum integer,
+    created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     author_id bigint NOT NULL,
     picture character varying(100)
 );
@@ -176,6 +181,7 @@ ALTER SEQUENCE public.offers_author_id_seq OWNED BY public.offers.author_id;
 -- Name: offers_categories; Type: TABLE; Schema: public; Owner: -
 --
 
+DROP TABLE IF EXISTS public.offers_categories;
 CREATE TABLE public.offers_categories (
     offer_id bigint NOT NULL,
     category_id bigint NOT NULL
@@ -243,6 +249,7 @@ ALTER SEQUENCE public.offers_id_seq OWNED BY public.offers.id;
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
+DROP TABLE IF EXISTS public.users CASCADE;
 CREATE TABLE public.users (
     id bigint NOT NULL,
     name character varying(100),
