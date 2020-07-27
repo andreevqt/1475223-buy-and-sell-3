@@ -9,6 +9,7 @@
     "eslint": "eslint --ext .js src/",
     "generate": "node ./src/service/service.js --generate 20",
     "fill": "node ./src/service/service.js --fill 20",
+    "sync": "node ./src/service/service.js --sync",
     "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
     "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
     "start-front-server": "cross-env LOG_LEVEL=error nodemon ./src/express > ./logs/app.log",
@@ -43,7 +44,10 @@
     "multer": "1.4.2",
     "nanoid": "3.1.6",
     "nodemon": "2.0.3",
+    "pg": "8.3.0",
+    "pg-hstore": "2.3.3",
     "pino": "6.2.1",
-    "pug": "2.0.4"
+    "pug": "2.0.4",
+    "sequelize": "6.3.3"
   }
 }

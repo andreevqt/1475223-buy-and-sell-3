@@ -6,7 +6,8 @@ const {
   version,
   help,
   server,
-  fill
+  fill,
+  sync
 } = require(`./cli/commands`);
 const chalk = require(`chalk`);
 
@@ -26,6 +27,7 @@ commandManager
   .add(`--version`, `выводит номер версии`, version)
   .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])
+  .add(`--sync`, `синхронизирует бд с моделями`, sync)
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка!`));
