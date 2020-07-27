@@ -5,7 +5,8 @@ const {
   generate,
   version,
   help,
-  server
+  server,
+  fill
 } = require(`./cli/commands`);
 const chalk = require(`chalk`);
 
@@ -21,6 +22,7 @@ const commandManager = new ConsoleCommandManager(
 
 commandManager
   .add(`--generate`, `формирует файл mocks.json`, generate, [`count`])
+  .add(`--fill`, `генерирует файл fill-db.sql со сформированными запросами для создания n-объявлений`, fill, [`n`])
   .add(`--version`, `выводит номер версии`, version)
   .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])

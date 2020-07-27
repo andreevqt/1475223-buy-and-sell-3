@@ -11,6 +11,6 @@ module.exports.API_PREFIX = `/api`;
 module.exports.API_SERVER_DEFAULT_PORT = 3000;
 
 module.exports.TYPES = [
-  `offer`,
-  `sale`
+  `buy`,
+  `sell`
 ];
