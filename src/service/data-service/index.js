@@ -4,5 +4,6 @@ module.exports = {
   OfferService: require(`./OfferService`),
   CommentService: require(`./CommentService`),
   CategoryService: require(`./CategoryService`),
-  SearchService: require(`./SearchService`)
+  SearchService: require(`./SearchService`),
+  UserService: require(`./UserService`)
 };

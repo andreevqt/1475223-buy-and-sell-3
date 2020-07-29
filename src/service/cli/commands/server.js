@@ -4,7 +4,6 @@ const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api`);
-const db = require(`../../db-service`);
 const {logger} = require(`../../../utils`).logger;
 const {logRequests} = require(`../../middleware`);
 const {
@@ -12,16 +11,11 @@ const {
 } = require(`../../constants`);
 
 const server = async (manager, args) => {
-  const port = args[0] || config.API_SERVER_PORT;
+  const port = args[0] || config.server.port;
 
   const app = express();
   app.use(express.json());
   app.use(logRequests);
-
-  await db.init();
-
-  // load data
-  await api.loadData();
 
   app.use(API_PREFIX, (req, res, next) => {
     logger.error(`[ROUTE]: ${req.method} ${req.url}`);

@@ -20,9 +20,7 @@ mixin ticket-form(formData, label)
             label(for="comment-field") Описание
             span Обязательное поле
         .ticket-form__row
-          select#category-field.form__select.js-multiple-select(name="category", data-label="Выбрать категорию публикации")
-            each cat in categories
-              option(value=cat, selected=formData.category.includes(cat)) #{cat}
+          select#category-field.form__select.js-multiple-select(name="category", data-label="Выбрать категорию публикации", data-options=JSON.stringify(categories.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id)}))))
         .ticket-form__row
           .form__field.form__field--price
             input#price-field.js-field.js-price(type="number", name="sum", min="1", required="", value=formData.sum)

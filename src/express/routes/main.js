@@ -3,7 +3,6 @@
 const {Router} = require(`express`);
 const axios = require(`axios`);
 const {logger} = require(`../../utils`).logger;
-const {latestOffers, popularOffers} = require(`../helpers`);
 
 const router = new Router();
 
@@ -14,17 +13,13 @@ module.exports = (app) => {
     let categories = [];
     let latest = [];
     let popular = [];
-    let hasData = false;
 
+    let hasData = false;
     try {
       categories = (await axios.get(`${url}/categories`)).data;
-      const results = (await axios.get(`${url}/offers`)).data;
-
-      hasData = results.length > 0;
-
-      latest = latestOffers(results);
-      popular = popularOffers(results);
-
+      latest = (await axios.get(`${url}/offers?limit=8`)).data;
+      popular = (await axios.get(`${url}/offers?order=popular&limit=8`)).data;
+      hasData = latest.length > 0;
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
@@ -38,10 +33,10 @@ module.exports = (app) => {
     let latest = [];
 
     try {
-      const response = (await axios.get(`${url}/offers`)).data;
-      latest = latestOffers(response);
+      latest = (await axios.get(`${url}/offers?limit=8`)).data;
       offers = (await axios.get(`${url}/search`, {params: {query}})).data;
     } catch (err) {
+      console.log(err);
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
 

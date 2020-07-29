@@ -13,8 +13,7 @@ module.exports = (app) => {
     let offers = [];
 
     try {
-      const results = (await axios.get(`${url}/offers`)).data;
-      offers = results.splice(0, 8);
+      offers = (await axios.get(`${url}/offers?limit=8`)).data;
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
@@ -27,9 +26,13 @@ module.exports = (app) => {
     let hasComments = false;
 
     try {
-      const results = (await axios.get(`${url}/offers`)).data;
-      offers = results.splice(0, 3);
-      hasComments = offers.some((offer) => offer.comments.length > 0);
+      offers = (await axios.get(`${url}/offers?limit=3`)).data;
+      for (let i = 0; i < offers.length; i++) {
+        const offer = offers[i];
+        const comments = (await axios.get(`${url}/offers/${offer.id}/comments`)).data;
+        hasComments = hasComments || comments.length > 0;
+        offer.comments = comments;
+      }
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }

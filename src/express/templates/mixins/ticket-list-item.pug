@@ -1,13 +1,14 @@
 mixin ticket-list-item(offer, js=false)
   li(class=`${attributes.class} ${js ? ` js-card` : ``}`)
     .ticket-card.ticket-card--color01
-      .ticket-card__img
-        img(src=(offer.picture ? `/img/${offer.picture}` : null), srcset=(offer.picture ? `/img/${offer.picture.replace(/\./, `@2x.`)} 2x` : null), alt="Изображение товара")
+      if offer.picture
+        .ticket-card__img
+          img(src=offer.picture.small, srcset=`${offer.picture.big} 2x`, alt="Изображение товара")
       .ticket-card__info
         span.ticket-card__label #{offer.type === "sell" ? "Продам" : "Куплю"}
         .ticket-card__categories
           each cat in offer.category
-            a(href="#") #{cat}
+            a(href=`/offers/category/${cat.id}`) #{cat.name}
         .ticket-card__header
           h3.ticket-card__title
             a(href=`/offers/${offer.id}`) #{offer.title}

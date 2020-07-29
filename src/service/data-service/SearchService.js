@@ -1,11 +1,17 @@
 'use strict';
 
 const BaseService = require(`./BaseService`);
+const {Op} = require(`sequelize`);
 
 class SearchService extends BaseService {
   search(query = ``) {
-    const regex = new RegExp(`^${query}`, `i`);
-    return this._offers.filter((offer) => regex.test(offer.title));
+    return this._services.offers.find({
+      where: {
+        title: {
+          [Op.iLike]: `%${query}%`
+        }
+      }
+    });
   }
 }
 

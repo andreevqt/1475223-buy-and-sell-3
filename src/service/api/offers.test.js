@@ -1,17 +1,14 @@
 'use strict';
-/* eslint-disable no-undef */
+/* eslint-disable no-undef, max-nested-callbacks */
 
 const request = require(`supertest`);
 const {API_PREFIX} = require(`../constants`);
-const {
-  app,
-  api: {offerService, commentService}
-} = require(`../testSetup`);
-
-const api = app;
+const {services} = require(`./`);
+const {server, setup, teardown} = require(`../test-setup`);
 
 const offerAttrs = {
-  category: [`Разное`],
+  authorId: 1,
+  category: [1, 2, 3],
   description: `При покупке с меня бесплатная доставка в черте города. Две страницы заляпаны свежим кофе. Пользовались бережно и только по большим праздникам., Бонусом отдам все аксессуары.`,
   picture: `item03.jpg`,
   title: `Продам новую приставку Sony Playstation 5.`,
@@ -23,44 +20,54 @@ const commentAttrs = {
   text: `Какой-то комментарий`
 };
 
+beforeAll(async () => {
+  await setup();
+});
+
+afterAll(async () => {
+  await teardown();
+});
+
 describe(`${API_PREFIX}/offers api endpoint`, () => {
   let testOffer = null;
   let testComment = null;
 
   beforeEach(async () => {
-    offerService.clear();
-    testOffer = offerService.create(offerAttrs);
-    testComment = commentService.create(testOffer.id, commentAttrs);
+    const offer = await services.offers.create(offerAttrs);
+    const comment = await services.comments.create(offer, commentAttrs);
+    testOffer = (await offer.reload()).convertToJSON();
+    testComment = comment.convertToJSON();
   });
 
   describe(`GET ${API_PREFIX}/offers`, () => {
     test(`Should return an offers list`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .get(`${API_PREFIX}/offers`)
         .expect(200);
 
+      const storedOffers = (await services.offers.findAll())
+        .map((offer) => offer.convertToJSON());
       const offers = response.body;
 
+      expect(storedOffers).toEqual(expect.arrayContaining(offers));
       expect(Array.isArray(offers)).toBe(true);
-      expect(offers.length).toBe(1);
-
-      const offer = offers[0];
-      expect(offer).toEqual(testOffer);
+      expect(offers.length).toBe(storedOffers.length);
+      expect(storedOffers).toEqual(expect.objectContaining(offers));
     });
   });
 
   describe(`GET ${API_PREFIX}/offers/:id`, () => {
     test(`Should get an offer by offerId`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .get(`${API_PREFIX}/offers/${testOffer.id}`)
         .expect(200);
 
       const offer = response.body;
-      expect(testOffer).toEqual(offer);
+      expect(testOffer).toEqual(expect.objectContaining(offer));
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .get(`${API_PREFIX}/offers/1234`);
 
       expect(response.status).toBe(404);
@@ -68,18 +75,22 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
   });
 
   describe(`POST ${API_PREFIX}/offers`, () => {
-    test(`Should create offer`, async () => {
-      const response = await request(api)
+    test(`Should create an offer`, async () => {
+      const response = await request(server)
         .post(`${API_PREFIX}/offers`)
         .send(offerAttrs)
         .expect(201);
 
       const offer = response.body;
-      expect(offer).toEqual(expect.objectContaining(offerAttrs));
+      expect(offer.title).toEqual(offerAttrs.title);
+      expect(offer.description).toEqual(offerAttrs.description);
+      expect(offer.sum).toEqual(offerAttrs.sum);
+      expect(offer.type).toEqual(offerAttrs.type);
+      offer.category.forEach((category) => expect(offerAttrs.category).toContain(category.id));
     });
 
     test(`Should return 400 error if wrong attributes`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .post(`${API_PREFIX}/offers`)
         .send({...offerAttrs, wrongAttribute: true});
 
@@ -94,7 +105,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     };
 
     test(`Should update an offer`, async () => {
-      let response = await request(api)
+      let response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}`)
         .send(toUpdate)
         .expect(200);
@@ -102,7 +113,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       const updated = response.body;
       expect(updated).toEqual(expect.objectContaining(toUpdate));
 
-      response = await request(api)
+      response = await request(server)
         .get(`${API_PREFIX}/offers/${testOffer.id}`)
         .expect(200);
 
@@ -111,7 +122,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const respone = await request(api)
+      const respone = await request(server)
         .put(`${API_PREFIX}/offers/1234`)
         .send(toUpdate);
 
@@ -121,16 +132,16 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
   describe(`DELETE ${API_PREFIX}/offers/:id`, () => {
     test(`Should delete an offer`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .delete(`${API_PREFIX}/offers/${testOffer.id}`)
         .expect(200);
 
       const deleted = response.body;
-      expect(deleted).toEqual(testOffer);
+      expect(testOffer).toEqual(expect.objectContaining(deleted));
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .delete(`${API_PREFIX}/offers/1234`);
 
       expect(response.status).toBe(404);
@@ -139,18 +150,18 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
   describe(`GET ${API_PREFIX}/offers/:offerId/comments`, () => {
     test(`Should get comments list by offerid`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .expect(200);
 
       const comments = response.body;
       expect(Array.isArray(comments)).toBe(true);
       expect(comments.length).toBe(1);
-      expect(comments[0]).toEqual(expect.objectContaining(commentAttrs));
+      expect(comments[0].text).toEqual(commentAttrs.text);
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .get(`${API_PREFIX}/offers/1234/comments`);
 
       expect(response.status).toBe(404);
@@ -159,21 +170,21 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
   describe(`DELETE ${API_PREFIX}/offers/:offerId/comments/:commentId`, () => {
     test(`Should delete comment by id`, async () => {
-      let response = await request(api)
+      let response = await request(server)
         .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`)
         .expect(200);
 
       const comment = response.body;
-      expect(comment).toEqual(testComment);
+      expect(testComment).toEqual(expect.objectContaining(comment));
 
-      response = await request(api)
+      response = await request(server)
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`);
 
       expect(response.status).toBe(404);
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .delete(`${API_PREFIX}/offers/1234/comments/${testComment.id}`);
 
       expect(response.status).toBe(404);
@@ -186,7 +197,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     };
 
     test(`Should create a comment`, async () => {
-      let response = await request(api)
+      let response = await request(server)
         .post(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .send(toCreate)
         .expect(201);
@@ -194,16 +205,22 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       const created = response.body;
       expect(created).toEqual(expect.objectContaining(toCreate));
 
-      response = await request(api)
+      response = await request(server)
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .expect(200);
 
       const comments = response.body;
-      expect(comments).toContainEqual(created);
+      expect(comments).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          id: created.id,
+          text: created.text,
+          author: created.author
+        })
+      ]));
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .post(`${API_PREFIX}/offers/1234`)
         .send(toCreate);
 
@@ -211,7 +228,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     });
 
     test(`Should return 400 error if wrong attributes`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .post(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .send({...toCreate, someWrongAttr: true});
 
@@ -225,7 +242,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     };
 
     test(`Should update a comment`, async () => {
-      let response = await request(api)
+      let response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`)
         .send(toUpdate)
         .expect(200);
@@ -233,7 +250,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       const updated = response.body;
       expect(updated).toEqual(expect.objectContaining(toUpdate));
 
-      response = await request(api)
+      response = await request(server)
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .expect(200);
 
@@ -242,7 +259,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .put(`${API_PREFIX}/offers/1234/comments/${testComment.id}`)
         .send(toUpdate);
 
@@ -250,7 +267,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     });
 
     test(`Should return 404 error if commentId is wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}/1234`)
         .send(toUpdate);
 
@@ -258,7 +275,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     });
 
     test(`Should return 404 error if commentId and offerId are wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .put(`${API_PREFIX}/offers/1234/comments/34343`)
         .send(toUpdate);
 
@@ -266,7 +283,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     });
 
     test(`Should return 400 error if attributes are wrong`, async () => {
-      const response = await request(api)
+      const response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`)
         .send({...toUpdate, someWrongAttr: true});
 

@@ -1,68 +1,54 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {ID_LEN} = require(`../constants`);
 const BaseService = require(`./BaseService`);
 
 class OfferService extends BaseService {
-  find(cb) {
-    return this._offers.filter(cb);
+  async getCategory(ids) {
+    return this._services.categories.find({
+      where: {
+        id: ids
+      }
+    });
   }
 
-  findAll() {
-    return this._offers;
-  }
-
-  findOne(id) {
-    return this._offers.find((offer) => offer.id === id);
-  }
-
-  create(attrs) {
-    const defaults = {
-      id: nanoid(ID_LEN),
-      comments: [],
-      category: [],
-      sum: null,
-      picture: null,
-      description: null,
-      title: null,
-      type: `offer`
-    };
-
-    if (!Array.isArray(attrs.category)) {
-      attrs.category = [attrs.category];
+  async create(attrs) {
+    const attrsCopy = {...attrs};
+    if (!Array.isArray(attrsCopy.category)) {
+      attrsCopy.category = [attrsCopy.category];
     }
 
-    const newOffer = {...defaults, ...attrs};
-    this._offers = [
-      ...this._offers,
-      newOffer
-    ];
-    return newOffer;
-  }
+    if (!attrsCopy.authorId) {
+      attrsCopy.authorId = (await this._services.users.random()).id;
+    }
 
-  delete(id) {
-    const deleted = this._offers.find((offer) => offer.id === id);
-
-    if (!deleted) {
+    const categories = await this.getCategory(attrsCopy.category);
+    if (!categories.length) {
       return null;
     }
 
-    this._offers = this._offers.filter((offer) => offer.id !== id);
-    return deleted;
+    const offer = await this._model.create(attrsCopy);
+    await offer.setCategory(categories);
+
+    return offer.reload();
   }
 
-  update(offerId, attrs) {
-    let updated = null;
-    this._offers = this._offers.map((offer) => {
-      if (offer.id === offerId) {
-        updated = {...offer, ...attrs};
-        return updated;
-      }
-      return offer;
-    });
+  async update(offer, attrs) {
+    let categories;
+    if (attrs.category) {
+      categories = await this.getCategory(attrs.category);
+    }
 
-    return updated;
+    if (!attrs.picture) {
+      delete attrs.picture;
+    }
+
+    await offer.update(attrs);
+
+    if (categories) {
+      await offer.setCategory(categories);
+    }
+
+    return offer.reload();
   }
 }
 

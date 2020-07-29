@@ -9,4 +9,6 @@ module.exports = {
   getMocks: require(`./getMocks`),
   formatDate: require(`./formatDate`),
   logger: require(`./logger`),
+  readData: require(`./readData`),
+  isClass: require(`./isClass`)
 };

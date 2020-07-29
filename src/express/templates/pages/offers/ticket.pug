@@ -6,7 +6,7 @@ block content
       h1.visually-hidden Карточка объявления
       .ticket__content
         .ticket__img
-          img(src=(offer.picture ? `/img/${offer.picture}` : null), srcset=(offer.picture ? `/img/${offer.picture.replace(/\./, `@2x.`)} 2x` : null), alt="Изображение товара")
+          img(src=offer.picture.small, srcset=`${offer.picture.big} 2x`, alt="Изображение товара")
         .ticket__info
           h2.ticket__title #{offer.title}
           .ticket__header
@@ -22,17 +22,17 @@ block content
               span 20 ноября 2019
             p
               b Автор:
-              a(href="#") Денис Шкатулкин
+              a(href="#")  #{offer.author.name}
             p
               b Контакты:
-              a(href="mailto:shkatulkin@ya.ru") shkatulkin@ya.ru
+              a(href=`mailto:${offer.author.email}`)  #{offer.author.email}
           ul.ticket__tags
             each cat in offer.category
               li
-                a.category-tile.category-tile--small(href="#")
+                a.category-tile.category-tile--small(href=`/offers/category/${cat.id}`)
                   span.category-tile__image
                     img(src="/img/cat.jpg", srcset="/img/cat@2x.jpg 2x", alt="Иконка категории")
-                  span.category-tile__label #{cat}
+                  span.category-tile__label #{cat.name}
 
       .ticket__comments
         h2.ticket__subtitle Коментарии
@@ -49,16 +49,16 @@ block content
                 span Обязательное поле
             button.comment-form__button.btn.btn--white.js-button(type="submit" disabled="") Отправить
 
-        if offer.comments.length > 0
+        if comments.length > 0
           .ticket__comments-list
             ul.comments-list
-              each comment in offer.comments
+              each comment in comments
                 li
                   .comment-card
                     .comment-card__header
                       a.comment-card__avatar.avatar(href="#")
-                        img(src="/img/avatar02.jpg", srcset="/img/avatar02@2x.jpg 2x", alt="Аватар пользователя")
-                      p.comment-card__author Георгий Шпиц
+                        img(src=`${comment.author.avatar}`, srcset=`${comment.author.avatar}@2x.jpg 2x`, alt="Аватар пользователя")
+                      p.comment-card__author #{comment.author.name}
                     .comment-card__content
                       p #{comment.text}
         else

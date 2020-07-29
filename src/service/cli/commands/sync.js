@@ -1,7 +1,9 @@
 'use strict';
 
-const db = require(`../../db-service`);
+const {service} = require(`../../models`);
 
 module.exports = async () => {
-  await db.sync();
+  await service.drop();
+  await service.sync();
+  await service.close();
 };

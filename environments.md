@@ -1,16 +1,37 @@
 # Переменные среды
 
 ## Общее  
-`NODE_ENV` - окружение - production, debug или staging 
+```sh
+# окружение - production, test или development
+NODE_ENV  
+```
 
 ## Приложение
-`APP_URL` - url сервера приложения  
-`APP_PORT` - порт сервера приложения  
-`API_PUBLIC_FOLDER` - public папка приложения  
-`API_SERVER_PORT` - порт api сервера  
+```sh
+# url сервера приложения 
+APP_URL
+# порт сервера приложения
+APP_PORT
+# public папка приложения
+APP_PUBLIC_FOLDER
+```
+
+## API сервер
+```sh
+# порт api сервера
+SERVER_PORT  
+```
 
 ## СУБД
-`DB_HOST` - хост  
-`DB_NAME` - имя базы данных  
-`DB_USER` - пользователь  
-`DB_PASSWORD` - пароль  
+Для каждой переменной окружения NODE_ENV своя переменная с учетными данными для подключения 
+к БД, например для `NODE_ENV=production`:
+```sh
+# хост БД
+DB_HOST_PRODUCTION
+# имя БД
+DB_NAME_PRODUCTION
+# пользователь
+DB_USER_PRODUCTION
+# пароль
+DB_PASSWORD_PRODUCTION
+```
