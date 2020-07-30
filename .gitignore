@@ -25,3 +25,6 @@ uploads/*
 
 # rest client
 *.http
+
+# env
+.env

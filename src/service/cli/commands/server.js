@@ -4,6 +4,7 @@ const config = require(`../../../../config`);
 const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api`);
+const db = require(`../../db-service`);
 const {logger} = require(`../../../utils`).logger;
 const {logRequests} = require(`../../middleware`);
 const {
@@ -16,6 +17,8 @@ const server = async (manager, args) => {
   const app = express();
   app.use(express.json());
   app.use(logRequests);
+
+  await db.init();
 
   // load data
   await api.loadData();

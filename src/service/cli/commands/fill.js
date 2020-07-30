@@ -42,25 +42,25 @@ const generatePicture = () => {
 const makeCommentsQuery = (comments) => {
   return `-- comments
 INSERT INTO public.comments (text, author_id, offer_id) VALUES 
-  ${comments.map((comment) => `('${comment.text}', ${comment.author.id}, ${comment.offer.id})`).join(`,\n\t`)};\n\n`
+\t${comments.map((comment) => `('${comment.text}', ${comment.author.id}, ${comment.offer.id})`).join(`,\n\t`)};\n\n`;
 };
 
 const makeCategoriesQuery = (categories) => {
   return `-- categories
 INSERT INTO public.categories (name) VALUES
-  ${categories.map((category) => `('${category.name}')`).join(`,\n\t`)};\n\n`;
+\t${categories.map((category) => `('${category.name}')`).join(`,\n\t`)};\n\n`;
 };
 
 const makeOffersQuery = (offers) => {
   return `-- offers
 INSERT INTO public.offers (title, description, type, picture, sum, author_id) VALUES
-  ${offers.map((offer) => `('${offer.title}', '${offer.description}', '${offer.type}', '${offer.picture}', ${offer.sum}, ${offer.author.id})`).join(`,\n\t`)};\n\n`
+\t${offers.map((offer) => `('${offer.title}', '${offer.description}', '${offer.type}', '${offer.picture}', ${offer.sum}, ${offer.author.id})`).join(`,\n\t`)};\n\n`;
 };
 
 const makeOffersCategoriesQuery = (items) => {
   return `-- offers_categories
 INSERT INTO public.offers_categories (offer_id, category_id) VALUES
-  ${items.map((item) => `(${item.offer.id}, ${item.category.id})`).join(`,\n\t`)};\n\n`
+\t${items.map((item) => `(${item.offer.id}, ${item.category.id})`).join(`,\n\t`)};\n\n`;
 };
 
 const makeUsersQuery = (users) => {
@@ -105,7 +105,7 @@ const writeFile = (outDir, data) => {
   query += makeOffersQuery(offers);
   query += makeCategoriesQuery(categories);
   query += makeOffersCategoriesQuery(categoriesForOffers);
-  query += makeCommentsQuery(comments)
+  query += makeCommentsQuery(comments);
 
   return fs.mkdir(outDir, {recursive: true})
     .then(() => fs.writeFile(`${outDir}/fill-db.sql`, query));
