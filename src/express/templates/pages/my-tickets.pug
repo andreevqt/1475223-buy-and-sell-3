@@ -8,5 +8,5 @@ block content
           a.tickets-list__btn.btn.btn--big(href="/offers/add")
             span Новая публикация
         ul
-          each offer in offers
+         - for (let offer of offers)
             +ticket-list-item(offer, true)(class="tickets-list__item")

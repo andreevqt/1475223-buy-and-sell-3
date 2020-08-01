@@ -1,18 +1,20 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {parseQuery} = require(`../middleware`);
 
 const router = new Router();
 
 module.exports = (app, services) => {
   app.use(`/search`, router);
 
-  router.get(`/`, async (req, res) => {
-    const {query} = req.query;
-    const results = await services.search.search(query);
+  router.get(`/`, parseQuery, async (req, res) => {
+    const {page, limit, rest} = req.locals.parsed;
+    const results = await services
+      .search.search(page, limit, {...rest, query: req.query.query});
 
     res.status(
-      results.length > 0 ? 200 : 404
+      results.items.length > 0 ? 200 : 404
     ).json(results);
   });
 };

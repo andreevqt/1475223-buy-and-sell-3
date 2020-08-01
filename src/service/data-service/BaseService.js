@@ -53,6 +53,10 @@ class BaseService {
     return model.findAll(model.getQueryOptions());
   }
 
+  async paginate(...args) {
+    return this._model.paginate(...args);
+  }
+
   async findById(id) {
     const model = this._model;
     return model.findByPk(id, model.getQueryOptions());

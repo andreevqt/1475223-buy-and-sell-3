@@ -1,0 +1,19 @@
+if paginator.totalPages > 1
+  ul.pagination
+    if !paginator.onFirstPage()
+      li.pagination__item
+        a.pagination__link(href=paginator.previousPageUrl()) назад
+    - for (let item of paginator.items)
+      if typeof item === `string`
+        li.pagination__item.pagination__item--disabled(aria-disabled=true)
+          span.pagination__link #{item}
+        - continue
+      li.pagination__item
+        if item.value === paginator.currentPage
+            span.pagination__link.active #{item.value}
+        else
+            a.pagination__link(href=item.url) #{item.value}
+    if paginator.hasMorePages()
+      li.pagination__item
+          a.pagination__link(href=paginator.nextPageUrl()) дальше
+

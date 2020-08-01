@@ -47,7 +47,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
       const storedOffers = (await services.offers.findAll())
         .map((offer) => offer.convertToJSON());
-      const offers = response.body;
+      const offers = response.body.items;
 
       expect(storedOffers).toEqual(expect.arrayContaining(offers));
       expect(Array.isArray(offers)).toBe(true);

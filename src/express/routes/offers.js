@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const upload = require(`../middleware/upload`);
 const axios = require(`axios`);
 const {logger} = require(`../../utils`).logger;
+const api = require(`../api-services`);
 
 module.exports = (app) => {
   const router = new Router();
@@ -19,7 +20,7 @@ module.exports = (app) => {
     const formData = {category: [], type: `buy`};
 
     try {
-      categories = (await axios.get(`${url}/categories`)).data;
+      categories = await api.categories.fetch();
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
     }
@@ -33,8 +34,8 @@ module.exports = (app) => {
     let categories = [];
 
     try {
-      categories = (await axios.get(`${url}/categories`)).data;
-      await axios.post(`${url}/offers`, formData);
+      categories = await api.categories.fetch();
+      await api.offers.create(formData);
     } catch (err) {
       res.render(`pages/offers/ticket-add`, {formData, categories, types});
       return;
@@ -49,8 +50,8 @@ module.exports = (app) => {
     const {id} = req.params;
 
     try {
-      offer = (await axios.get(`${url}/offers/${id}`)).data;
-      comments = (await axios.get(`${url}/offers/${id}/comments`)).data;
+      offer = await api.offers.get(id);
+      comments = await api.comments.fetch(id);
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
@@ -79,8 +80,8 @@ module.exports = (app) => {
     let categories = null;
 
     try {
-      formData = (await axios.get(`${url}/offers/${id}`)).data;
-      categories = (await axios.get(`${url}/categories`)).data;
+      formData = await api.offers.get(id);
+      categories = await api.offers.fetch();
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
@@ -95,7 +96,7 @@ module.exports = (app) => {
     const formData = {picture: filename, category: [], ...req.body};
 
     try {
-      await axios.put(`${url}/offers/${id}`, formData);
+      await api.offers.update(id, formData);
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
@@ -105,20 +106,21 @@ module.exports = (app) => {
   });
 
   router.get(`/category/:id`, async (req, res) => {
+    const {query, page, limit} = req.query;
     const {id} = req.params;
     let offers = [];
     let categories = [];
     let category;
 
     try {
-      offers = (await axios.get(`${url}/offers/category/${id}`)).data;
-      categories = (await axios.get(`${url}/categories`)).data;
-      category = (await axios.get(`${url}/categories/${id}`)).data;
-      console.log(category.name);
+      offers = await api.offers.fetchByCat({id, query, page, limit});
+      categories = await api.categories.fetch();
+      category = await api.categories.get(id);
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
     }
+
 
     res.render(`pages/category`, {offers, category, categories});
   });

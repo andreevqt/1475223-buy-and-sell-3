@@ -10,6 +10,7 @@ const setup = async () => {
 
   await services.categories.bulkCreate(data.categories.map((name) => ({name})));
   await services.users.bulkCreate(data.users);
+  await services.offers.bulkCreate(data.offers);
 };
 
 module.exports = setup;

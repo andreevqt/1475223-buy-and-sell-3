@@ -4,14 +4,17 @@ const BaseService = require(`./BaseService`);
 const {Op} = require(`sequelize`);
 
 class SearchService extends BaseService {
-  search(query = ``) {
-    return this._services.offers.find({
+  search(page, limit, rest) {
+    const options = {
+      ...rest,
       where: {
         title: {
-          [Op.iLike]: `%${query}%`
+          [Op.iLike]: `%${rest.query}%`
         }
       }
-    });
+    };
+
+    return this._services.offers.paginate(page, limit, options);
   }
 }
 

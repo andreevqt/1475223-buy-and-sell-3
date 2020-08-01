@@ -2,8 +2,8 @@ mixin categories(hiddenTitle, categories, active)
   section.categories-list
     h1.visually-hidden #{hiddenTitle}
     ul.categories-list__wrapper
-      each cat in categories
-        if (active)
-          +category(cat)(class=`${active === cat.name ?  `category-tile--active` : `` }`)
-        else
-          +category(cat)(class=`category-tile--default`)
+      - for (let cat of categories)
+          if (active)
+            +category(cat)(class=`${active === cat.name ?  `category-tile--active` : `` }`)
+          else
+            +category(cat)(class=`category-tile--default`)

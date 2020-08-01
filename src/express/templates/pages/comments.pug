@@ -5,7 +5,7 @@ block content
     .comments__wrapper
       h1.visually-hidden Страница комментариев
       if hasComments
-        each offer in offers
+        - for (let offer of offers)
           .comments__block
             .comments__header
               a.announce-card(href=`/offers/${offer.id}`)

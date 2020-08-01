@@ -50,6 +50,10 @@ class OfferService extends BaseService {
 
     return offer.reload();
   }
+
+  async findByCategory(page, limit, categoryId) {
+    return this._model.findByCategory(page, limit, categoryId);
+  }
 }
 
 module.exports = OfferService;

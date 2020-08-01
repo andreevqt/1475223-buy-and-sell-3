@@ -31,7 +31,7 @@ describe(`Search api endpoint`, () => {
         .query({query})
         .expect(200);
 
-      const results = response.body;
+      const results = response.body.items;
       expect(Array.isArray(results)).toBe(true);
       expect(results.length > 0).toBe(true);
 
@@ -53,7 +53,7 @@ describe(`Search api endpoint`, () => {
 
       expect(response.status).toBe(404);
 
-      const results = response.body;
+      const results = response.body.items;
       expect(Array.isArray(results)).toBe(true);
       expect(results.length).toBe(0);
     });
