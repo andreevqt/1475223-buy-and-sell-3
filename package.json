@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "description": "* Студент: [Александр Андреев](https://up.htmlacademy.ru/nodejs/3/user/1475223). * Наставник: [Артемий Бойков](https://htmlacademy.ru/profile/id607755).",
   "main": "./src/service/service.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "scripts": {
-    "test": "npm run test::rest",
-    "test::rest": "jest",
+    "test": "cross-env NODE_ENV=test npm run test::rest",
+    "test::rest": "jest --runInBand",
     "eslint": "eslint --ext .js src/",
     "generate": "node ./src/service/service.js --generate 20",
     "fill": "node ./src/service/service.js --fill 20",
+    "filldb": "node ./src/service/service.js --filldb 20",
+    "migrate": "sequelize-cli db:migrate",
+    "migrate::rollback": "sequelize-cli db:migrate:undo:all",
+    "migrate::refresh": "npm run migrate::rollback & npm run migrate",
     "sync": "node ./src/service/service.js --sync",
     "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
     "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
@@ -31,6 +38,7 @@
     "eslint-config-htmlacademy": "0.5.2",
     "jest": "26.0.1",
     "pino-pretty": "4.0.0",
+    "sequelize-cli": "6.2.0",
     "supertest": "4.0.2"
   },
   "dependencies": {
@@ -40,7 +48,9 @@
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-session": "1.17.1",
+    "lodash": "4.17.19",
     "mime": "2.4.5",
+    "moment": "2.27.0",
     "multer": "1.4.2",
     "nanoid": "3.1.6",
     "nodemon": "2.0.3",

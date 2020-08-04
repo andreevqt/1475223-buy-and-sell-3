@@ -1,69 +1,33 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {ID_LEN} = require(`../constants`);
+const BaseService = require(`./BaseService`);
 
-class CommentService {
-  constructor(offerService) {
-    this.offerService = offerService;
+class CommentService extends BaseService {
+  findAll(offer) {
+    return this._model.findAll({
+      ...this._model.getQueryOptions(),
+      where: {
+        offerId: offer.id
+      }
+    });
   }
 
-  findAll(offerId) {
-    const offer = this.offerService.findOne(offerId);
-    if (!offer) {
-      return null;
-    }
+  async create(offer, attrs) {
+    const offerId = typeof offer === `object` ? offer.id : offer;
 
-    return offer.comments;
-  }
+    const user = await this._services.users.random();
+    attrs.authorId = user.id;
+    attrs.offerId = offerId;
 
-  create(offerId, attrs) {
-    const offer = this.offerService.findOne(offerId);
-    if (!offer) {
-      return null;
-    }
-
-    const comment = {id: nanoid(ID_LEN), ...attrs};
-    offer.comments = [...offer.comments, comment];
+    const comment = await this._model.create(attrs);
+    await comment.reload();
 
     return comment;
   }
 
-  delete(offerId, commentId) {
-    const offer = this.offerService.findOne(offerId);
-    if (!offer) {
-      return null;
-    }
-
-    let deleted = null;
-
-    offer.comments = offer.comments.filter((comment) => {
-      if (comment.id === commentId) {
-        deleted = comment;
-        return false;
-      }
-      return true;
-    });
-
-    return deleted;
-  }
-
-  update(offerId, commentId, attrs) {
-    const offer = this.offerService.findOne(offerId);
-    if (!offer) {
-      return null;
-    }
-
-    let updated = null;
-    offer.comments = offer.comments.map((comment) => {
-      if (comment.id === commentId) {
-        updated = {...comment, ...attrs};
-        return updated;
-      }
-      return comment;
-    });
-
-    return updated;
+  async update(comment, attrs) {
+    await comment.update({text: attrs.text});
+    return comment.reload();
   }
 }
 

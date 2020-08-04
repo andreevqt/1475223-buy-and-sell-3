@@ -14,8 +14,8 @@ const {
 
 const app = express();
 
-app.set(`app_url`, `${config.APP_URL}:${config.APP_PORT}`);
-app.set(`api_url`, `${config.APP_URL}:${config.API_SERVER_PORT}${API_PREFIX}`);
+app.set(`app_url`, `${config.app.url}:${config.app.port}`);
+app.set(`api_url`, `${config.app.url}:${config.server.port}${API_PREFIX}`);
 app.set(`logger`, logger);
 
 app.use(express.urlencoded({
@@ -26,7 +26,7 @@ app.use(`/`, main(app));
 app.use(`/my`, my(app));
 app.use(`/offers`, offers(app));
 
-app.use(express.static(path.resolve(__dirname, config.APP_PUBLIC_FOLDER)));
+app.use(express.static(path.resolve(__dirname, config.app.public)));
 
 app.use((req, res, _next) => {
   logger.info(`[ERROR]: status - 404, url: ${req.url}`);
@@ -41,5 +41,5 @@ app.use((err, req, res, _next) => {
 app.set(`views`, path.resolve(__dirname, `templates`));
 app.set(`view engine`, `pug`);
 
-once(app.listen(config.APP_PORT), `listening`)
-  .then(() => logger.info(`Ожидаю соединений на  ${config.APP_PORT}`));
+once(app.listen(config.app.port), `listening`)
+  .then(() => logger.info(`Ожидаю соединений на  ${config.app.port}`));

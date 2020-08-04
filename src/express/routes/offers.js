@@ -8,6 +8,7 @@ const {logger} = require(`../../utils`).logger;
 module.exports = (app) => {
   const router = new Router();
   const url = app.get(`api_url`);
+
   const types = [
     {label: `Куплю`, value: `buy`},
     {label: `Продам`, value: `sell`},
@@ -43,17 +44,19 @@ module.exports = (app) => {
   });
 
   router.get(`/:id`, async (req, res) => {
-    let offer = null;
+    let offer;
+    let comments;
     const {id} = req.params;
 
     try {
       offer = (await axios.get(`${url}/offers/${id}`)).data;
+      comments = (await axios.get(`${url}/offers/${id}/comments`)).data;
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
     }
 
-    res.render(`pages/offers/ticket`, {offer});
+    res.render(`pages/offers/ticket`, {offer, comments});
   });
 
   router.post(`/:id`, async (req, res) => {
@@ -101,14 +104,17 @@ module.exports = (app) => {
     res.redirect(`/my`);
   });
 
-  router.get(`/category/:category`, async (req, res) => {
-    const {category} = req.params;
+  router.get(`/category/:id`, async (req, res) => {
+    const {id} = req.params;
     let offers = [];
     let categories = [];
+    let category;
 
     try {
-      offers = (await axios.get(`${url}/offers/category/${encodeURI(category)}`)).data;
+      offers = (await axios.get(`${url}/offers/category/${id}`)).data;
       categories = (await axios.get(`${url}/categories`)).data;
+      category = (await axios.get(`${url}/categories/${id}`)).data;
+      console.log(category.name);
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;

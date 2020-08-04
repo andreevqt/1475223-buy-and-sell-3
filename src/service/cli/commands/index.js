@@ -6,5 +6,6 @@ module.exports = {
   version: require(`./version`),
   server: require(`./server`),
   fill: require(`./fill`),
-  sync: require(`./sync`)
+  filldb: require(`./filldb`),
+  sync: require(`./sync`),
 };
