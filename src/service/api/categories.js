@@ -1,14 +1,16 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {parseQuery} = require(`../middleware`);
 
 const router = new Router();
 
 module.exports = (app, services) => {
   app.use(`/categories`, router);
 
-  router.get(`/`, async (req, res) => {
-    const categories = await services.categories.findAll();
+  router.get(`/`, parseQuery, async (req, res) => {
+    const {page, limit} = req.locals.parsed;
+    const categories = await services.categories.paginate(page, limit);
     res.status(200).json(categories);
   });
 

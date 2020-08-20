@@ -3,6 +3,7 @@
 /* eslint-disable object-shorthand */
 
 const BaseModel = require(`./BaseModel`);
+const {Sequelize} = require(`sequelize`);
 
 module.exports = (sequelize, DataTypes) => {
   class Offer extends BaseModel {
@@ -23,8 +24,18 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
+    static findByCategory(page, limit, categoryId) {
+      return this.paginate(page, limit, {
+        where: {
+          id: {
+            [Sequelize.Op.in]: [sequelize.literal(`(SELECT "offerId" FROM "offers_categories" WHERE "categoryId" = ${categoryId})`)]
+          }
+        }
+      });
+    }
+
     static getQueryOptions() {
-      const {User, Category, Comment} = sequelize.models;
+      const {User, Category} = sequelize.models;
 
       const include = [{
         model: User, as: `author`,
@@ -34,10 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         as: `category`,
         attributes: [`id`, `name`],
         through: {attributes: []}
-      }, {
-        model: Comment,
-        as: `comments`,
-        attributes: [`id`, `text`]
       }];
 
       const attributes = {
@@ -68,9 +75,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.JSON,
       set: function (value) {
         const picture = {
-          orig: `/img/${value}.jpg`,
-          big: `/img/${value}.jpg`,
-          small: `/img/${value}.jpg`
+          orig: `/img/${value}`,
+          big: `/img/${value}`,
+          small: `/img/${value}`
         };
         this.setDataValue(`picture`, picture);
       }

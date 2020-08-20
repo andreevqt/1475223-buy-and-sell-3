@@ -7,10 +7,11 @@ block content
       if offers.length > 0
         p.search-results__label
           | Найдено 
-          span.js-results #{offers.length} публикаций
+          span.js-results #{offers.total} публикаций
         ul.search-results__list
-          each offer in offers
+          - for (offer of offers)
             +ticket-list-item(offer)(class="search-results__item")
+        .tickets-list__pagination !{offers.links()}
       else
         .search-results__message
           p Не найдено ни одной публикации

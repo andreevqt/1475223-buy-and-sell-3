@@ -53,8 +53,8 @@ module.exports = (app, services) => {
   });
 
   router.get(`/`, parseQuery, async (req, res) => {
-    const query = req.locals.parsed;
-    const offers = await services.offers.find(query);
+    const {page, limit, ...rest} = req.locals.parsed;
+    const offers = await services.offers.paginate(page, limit, rest);
     res.status(200).json(offers);
   });
 
@@ -108,14 +108,11 @@ module.exports = (app, services) => {
     res.status(201).json(created);
   });
 
-  router.get(`/category/:categoryId`, async (req, res) => {
+  router.get(`/category/:categoryId`, parseQuery, async (req, res) => {
     const {categoryId} = req.params;
+    const {page, limit} = req.locals.parsed;
 
-    const offers = await services.offers.find({
-      where: {
-        '$category.id$': categoryId
-      }
-    });
+    const offers = await services.offers.findByCategory(page, limit, categoryId);
 
     if (!offers) {
       res.status(404).send(`Not found`);

@@ -12,7 +12,7 @@
     "eslint": "eslint --ext .js src/",
     "generate": "node ./src/service/service.js --generate 20",
     "fill": "node ./src/service/service.js --fill 20",
-    "filldb": "node ./src/service/service.js --filldb 20",
+    "filldb": "node ./src/service/service.js --filldb 200",
     "migrate": "sequelize-cli db:migrate",
     "migrate::rollback": "sequelize-cli db:migrate:undo:all",
     "migrate::refresh": "npm run migrate::rollback & npm run migrate",

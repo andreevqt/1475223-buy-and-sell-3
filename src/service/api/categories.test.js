@@ -21,7 +21,7 @@ describe(`Categories api endpoint`, () => {
 
       const categories = (await services.categories.findAll())
         .map((category) => category.convertToJSON());
-      const results = response.body;
+      const results = response.body.items;
 
       expect(categories).toEqual(expect.arrayContaining(results));
       expect(Array.isArray(results)).toBe(true);

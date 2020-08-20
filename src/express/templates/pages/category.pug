@@ -3,4 +3,3 @@ extends ../layouts/base/layout
 block content
   +categories(`Категории`, categories, category.name)
   +ticket-list(category.name, `Предложения из категориии ${category.name}`, offers, true)
-    b.js-qty #{offers.length}

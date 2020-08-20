@@ -37,11 +37,15 @@ module.exports = (req, _res, next) => {
     parsed.order = [makeOrder(order)];
   }
 
-
   const limit = query[`limit`];
 
   if (limit) {
     parsed.limit = limit;
+  }
+
+  const page = query[`page`];
+  if (page) {
+    parsed.page = +page;
   }
 
   req.locals = req.locals || {};

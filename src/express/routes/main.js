@@ -1,14 +1,13 @@
 'use strict';
 
 const {Router} = require(`express`);
-const axios = require(`axios`);
+// const axios = require(`axios`);
 const {logger} = require(`../../utils`).logger;
+const api = require(`../api-services`);
 
 const router = new Router();
 
-module.exports = (app) => {
-  const url = app.get(`api_url`);
-
+module.exports = (_app) => {
   router.get(`/`, async (req, res) => {
     let categories = [];
     let latest = [];
@@ -16,9 +15,9 @@ module.exports = (app) => {
 
     let hasData = false;
     try {
-      categories = (await axios.get(`${url}/categories`)).data;
-      latest = (await axios.get(`${url}/offers?limit=8`)).data;
-      popular = (await axios.get(`${url}/offers?order=popular&limit=8`)).data;
+      categories = await api.categories.fetch();
+      latest = await api.offers.fetch({limit: 8});
+      popular = await api.offers.fetch({order: `popular`, limit: 8});
       hasData = latest.length > 0;
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
@@ -28,13 +27,14 @@ module.exports = (app) => {
   });
 
   router.get(`/search`, async (req, res, _next) => {
-    const {query} = req.query;
+    const {query, page, limit} = req.query;
     let offers = [];
     let latest = [];
 
     try {
-      latest = (await axios.get(`${url}/offers?limit=8`)).data;
-      offers = (await axios.get(`${url}/search`, {params: {query}})).data;
+      latest = await api.offers.fetch({limit: 4});
+      offers = await api.search.fetch({query, page, limit});
+      offers.paginator.append(`query`, query);
     } catch (err) {
       console.log(err);
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
