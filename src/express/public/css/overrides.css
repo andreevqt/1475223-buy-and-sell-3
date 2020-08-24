@@ -25,3 +25,56 @@
   color: #fff;
   background-color: #2b51a6;
 }
+
+.form__field--invalid textarea {
+  color: #f98c24;
+  border-color: #f98c24;
+}
+
+.form__select-container {
+  flex: 1 1 100%;
+}
+
+.form__helper-text {
+  margin-top: 7px;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f98c24;
+}
+
+.form__select-container--invalid .selectr-selected,
+.form__select-container--invalid .selectr-tags {
+  border-color: #f98c24;
+}
+
+.form__select-container--invalid .selectr-tags {
+  border-color: transparent;
+}
+
+.form__select-container--invalid .selectr-placeholder {
+  color: #f98c24;
+}
+
+.form__select--container .selectr-container {
+  margin-bottom: 7px;
+}
+
+.form__select-container--invalid .open .selectr-placeholder {
+  color: #fff;
+}
+
+.ticket-form__field-avatar {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-form__field-avatar--invalid .ticket-form__text-upload {
+  color: #f98c24;
+}
+
+.ticket-form__field-avatar--invalid label {
+  border-color: #f98c24;
+}

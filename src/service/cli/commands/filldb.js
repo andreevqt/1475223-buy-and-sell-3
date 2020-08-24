@@ -22,7 +22,7 @@ const {data} = require(`../../test-setup`);
 
 const generatePicture = () => {
   const idx = randomInt(1, MAX_IMAGE_IDX);
-  return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}`;
+  return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
 };
 
 const generateDate = () => {

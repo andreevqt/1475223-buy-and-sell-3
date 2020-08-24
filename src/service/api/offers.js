@@ -1,45 +1,42 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {paramsValidator, parseQuery} = require(`../middleware`);
+const {parseQuery} = require(`../middleware`);
+const validators = require(`../validators`);
+const {validate} = require(`express-validation`);
 
 const router = new Router();
-
-const offerValidator = paramsValidator([
-  `category`,
-  `description`,
-  `picture`,
-  `title`,
-  `type`,
-  `sum`,
-  `authorId`
-]);
-
-const commentValidator = paramsValidator([
-  `text`
-]);
 
 module.exports = (app, services) => {
   app.use(`/offers`, router);
 
-  router.param(`offerId`, async (req, res, next) => {
-    const {offerId} = req.params;
-    const offer = await services.offers.findById(offerId);
+  router.param(`offerId`, async (req, res, next, id) => {
+    if (!/^[0-9]+$/.test(id)) {
+      res.status(400).send(`Id should be a number`);
+      return;
+    }
+
+    const offer = await services.offers.findById(id);
     if (!offer) {
       res.status(404).send(`Not found`);
       return;
     }
+
     req.locals = req.locals || {};
     req.locals.offer = offer;
     next();
   });
 
-  router.param(`commentId`, async (req, res, next) => {
+  router.param(`commentId`, async (req, res, next, id) => {
+    if (!/^[0-9]+$/.test(id)) {
+      res.status(400).send(`Id should be a number`);
+      return;
+    }
+
     const {offer} = req.locals;
-    const {commentId} = req.params;
     const comment = await services.comments.findOne({
       where: {
-        id: commentId,
+        id,
         offerId: offer.id
       }
     });
@@ -47,12 +44,13 @@ module.exports = (app, services) => {
       res.status(404).send(`Not found`);
       return;
     }
+
     req.locals = req.locals || {};
     req.locals.comment = comment;
     next();
   });
 
-  router.get(`/`, parseQuery, async (req, res) => {
+  router.get(`/`, [validate(validators.offers.list), parseQuery], async (req, res) => {
     const {page, limit, ...rest} = req.locals.parsed;
     const offers = await services.offers.paginate(page, limit, rest);
     res.status(200).json(offers);
@@ -63,12 +61,12 @@ module.exports = (app, services) => {
     res.status(200).json(offer);
   });
 
-  router.post(`/`, offerValidator, async (req, res) => {
+  router.post(`/`, validate(validators.offers.create, {}, {abortEarly: false}), async (req, res) => {
     const offer = await services.offers.create(req.body);
     res.status(201).json(offer);
   });
 
-  router.put(`/:offerId`, offerValidator, async (req, res) => {
+  router.put(`/:offerId`, validate(validators.offers.update, {}, {abortEarly: false}), async (req, res) => {
     const {offer} = req.locals;
     const updated = await services.offers.update(offer, req.body);
     res.status(200).json(updated);
@@ -96,13 +94,13 @@ module.exports = (app, services) => {
     res.status(200).json(deleted);
   });
 
-  router.put(`/:offerId/comments/:commentId`, commentValidator, async (req, res) => {
+  router.put(`/:offerId/comments/:commentId`, validate(validators.comments.update, {}, {abortEarly: false}), async (req, res) => {
     const {comment} = req.locals;
     const updated = await services.comments.update(comment, req.body);
     res.status(200).json(updated);
   });
 
-  router.post(`/:offerId/comments`, commentValidator, async (req, res) => {
+  router.post(`/:offerId/comments`, validate(validators.comments.create, {}, {abortEarly: false}), async (req, res) => {
     const {offer} = req.locals;
     const created = await services.comments.create(offer, req.body);
     res.status(201).json(created);

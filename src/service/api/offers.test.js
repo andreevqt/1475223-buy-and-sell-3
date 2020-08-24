@@ -7,13 +7,13 @@ const {services} = require(`./`);
 const {server, setup, teardown} = require(`../test-setup`);
 
 const offerAttrs = {
-  authorId: 1,
-  category: [1, 2, 3],
+  // authorId: 1,
+  category: [`1`, `2`, `3`],
   description: `При покупке с меня бесплатная доставка в черте города. Две страницы заляпаны свежим кофе. Пользовались бережно и только по большим праздникам., Бонусом отдам все аксессуары.`,
   picture: `item03.jpg`,
   title: `Продам новую приставку Sony Playstation 5.`,
   sum: 42698,
-  type: `offer`
+  type: `buy`
 };
 
 const commentAttrs = {
@@ -54,6 +54,26 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       expect(offers.length).toBe(storedOffers.length);
       expect(storedOffers).toEqual(expect.objectContaining(offers));
     });
+
+    test(`Should return 400 error if wrong params`, async () => {
+      let response;
+
+      response = await request(server)
+        .get(`${API_PREFIX}/offers?limit=sdsd4`);
+      expect(response.status).toBe(400);
+
+      response = await request(server)
+        .get(`${API_PREFIX}/offers?limit=4`);
+      expect(response.status).toBe(200);
+
+      response = await request(server)
+        .get(`${API_PREFIX}/offers?page=sdsd4`);
+      expect(response.status).toBe(400);
+
+      response = await request(server)
+        .get(`${API_PREFIX}/offers?page=1`);
+      expect(response.status).toBe(200);
+    });
   });
 
   describe(`GET ${API_PREFIX}/offers/:id`, () => {
@@ -72,6 +92,13 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
       expect(response.status).toBe(404);
     });
+
+    test(`Should return 400 error if offerId isn't a string`, async () => {
+      const response = await request(server)
+        .get(`${API_PREFIX}/offers/123asd`);
+
+      expect(response.status).toBe(400);
+    });
   });
 
   describe(`POST ${API_PREFIX}/offers`, () => {
@@ -86,14 +113,71 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       expect(offer.description).toEqual(offerAttrs.description);
       expect(offer.sum).toEqual(offerAttrs.sum);
       expect(offer.type).toEqual(offerAttrs.type);
-      offer.category.forEach((category) => expect(offerAttrs.category).toContain(category.id));
+      offer.category.forEach((category) => expect(offerAttrs.category).toContain(category.id.toString()));
     });
 
     test(`Should return 400 error if wrong attributes`, async () => {
-      const response = await request(server)
+      let response = await request(server)
         .post(`${API_PREFIX}/offers`)
-        .send({...offerAttrs, wrongAttribute: true});
+        .send({...offerAttrs, sum: 90});
+      expect(response.status).toBe(400);
 
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, title: 123});
+      expect(response.status).toBe(400);
+
+      // title.length < 10
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, title: `123`});
+      expect(response.status).toBe(400);
+
+      // title.length > 1000
+      const title = Array.from(Array(1001)).map((_el, i) => i).join(``);
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, title});
+      expect(response.status).toBe(400);
+
+      // description.length < 50
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, description: `123`});
+      expect(response.status).toBe(400);
+
+      let description;
+
+      // 50 <= description < 1000
+      description = Array.from(Array(52)).map((_el, i) => i).join(``);
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, description});
+      expect(response.status).toBe(201);
+
+      // description.length > 1000
+      description = Array.from(Array(1001)).map((_el, i) => i).join(``);
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, description});
+      expect(response.status).toBe(400);
+
+      // category.length < 1
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, category: []});
+      expect(response.status).toBe(400);
+
+      // category.length >= 1
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, category: [1]});
+      expect(response.status).toBe(201);
+
+      // [`buy`, `sell`].includes(type) === false
+      response = await request(server)
+        .post(`${API_PREFIX}/offers`)
+        .send({...offerAttrs, type: `offer`});
       expect(response.status).toBe(400);
     });
   });
@@ -101,7 +185,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
   describe(`PUT ${API_PREFIX}/offers/:offerId`, () => {
     const toUpdate = {
       title: `Обновленный заголовок`,
-      sum: 24
+      sum: 120
     };
 
     test(`Should update an offer`, async () => {
@@ -166,6 +250,13 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
       expect(response.status).toBe(404);
     });
+
+    test(`Should return 400 error if offerId isn't a number`, async () => {
+      const response = await request(server)
+        .get(`${API_PREFIX}/offers/1234sdsd/comments`);
+
+      expect(response.status).toBe(400);
+    });
   });
 
   describe(`DELETE ${API_PREFIX}/offers/:offerId/comments/:commentId`, () => {
@@ -188,6 +279,20 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
         .delete(`${API_PREFIX}/offers/1234/comments/${testComment.id}`);
 
       expect(response.status).toBe(404);
+    });
+
+    test(`Should return 404 error if commentId is wrong`, async () => {
+      const response = await request(server)
+        .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/1234`);
+
+      expect(response.status).toBe(404);
+    });
+
+    test(`Should return 400 error if commentId isn't a string`, async () => {
+      const response = await request(server)
+        .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/1234asd`);
+
+      expect(response.status).toBe(400);
     });
   });
 

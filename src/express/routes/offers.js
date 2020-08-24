@@ -29,7 +29,7 @@ module.exports = (app) => {
   });
 
   router.post(`/add`, upload.single(`picture`), async (req, res) => {
-    const filename = req.file ? req.file.filename : null;
+    const filename = req.file ? req.file.filename : undefined;
     const formData = {picture: filename, category: [], ...req.body};
     let categories = [];
 
@@ -37,7 +37,8 @@ module.exports = (app) => {
       categories = await api.categories.fetch();
       await api.offers.create(formData);
     } catch (err) {
-      res.render(`pages/offers/ticket-add`, {formData, categories, types});
+      const errors = err.response.data.body;
+      res.render(`pages/offers/ticket-add`, {formData, categories, types, errors});
       return;
     }
 
@@ -76,12 +77,12 @@ module.exports = (app) => {
 
   router.get(`/edit/:id`, async (req, res) => {
     const {id} = req.params;
-    let formData = null;
-    let categories = null;
+    let formData;
+    let categories;
 
     try {
       formData = await api.offers.get(id);
-      categories = await api.offers.fetch();
+      categories = await api.categories.fetch();
     } catch (err) {
       res.status(404).render(`errors/404`);
       return;
@@ -92,13 +93,16 @@ module.exports = (app) => {
 
   router.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
     const {id} = req.params;
-    const filename = req.file ? req.file.filename : null;
+    const filename = req.file ? req.file.filename : undefined;
     const formData = {picture: filename, category: [], ...req.body};
+    let categories;
 
     try {
+      categories = await api.categories.fetch();
       await api.offers.update(id, formData);
     } catch (err) {
-      res.status(404).render(`errors/404`);
+      const errors = err.response.data.body;
+      res.render(`pages/offers/ticket-edit`, {formData, categories, types, errors});
       return;
     }
 

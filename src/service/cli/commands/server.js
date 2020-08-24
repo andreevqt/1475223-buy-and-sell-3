@@ -5,10 +5,12 @@ const express = require(`express`);
 const {once} = require(`events`);
 const api = require(`../../api`);
 const {logger} = require(`../../../utils`).logger;
+const {translateMessage} = require(`../../../utils`);
 const {logRequests} = require(`../../middleware`);
 const {
   API_PREFIX
 } = require(`../../constants`);
+const {ValidationError} = require(`express-validation`);
 
 const server = async (manager, args) => {
   const port = args[0] || config.server.port;
@@ -24,6 +26,22 @@ const server = async (manager, args) => {
 
   app.use((req, res) => res.status(404).send(`Not found`));
   app.use((err, req, res, _next) => {
+    if (err instanceof ValidationError) {
+      const results = err.details;
+      const errors = Object.keys(results)
+        .reduce((acc, parameter) => {
+          return ({
+            ...acc,
+            [parameter]: results[parameter].reduce(
+              (inner, el) => ({...inner, [el.context.key]: translateMessage(el)}),
+              {}
+            )
+          });
+        }, {});
+      res.status(err.statusCode).json(errors);
+      return;
+    }
+
     logger.info(`[ERROR]: ${err.stack}`);
     res.status(500).send(`Internal server error`);
   });
