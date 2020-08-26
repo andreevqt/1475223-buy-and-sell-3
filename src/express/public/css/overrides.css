@@ -78,3 +78,7 @@
 .ticket-form__field-avatar--invalid label {
   border-color: #f98c24;
 }
+
+.sign-up__form {
+  height: auto;
+}

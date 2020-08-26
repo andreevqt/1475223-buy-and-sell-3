@@ -17,6 +17,8 @@ const translateMessage = ({context, type, message}) => {
       return `"${context.label}" должно быть не меньше ${context.limit}`;
     case `number.max`:
       return `"${context.label}" должно быть не больше ${context.limit}`;
+    case `string.pattern.name`:
+      return `"${context.label}" должно содержать ${context.name}`;
     default:
       return message;
   }

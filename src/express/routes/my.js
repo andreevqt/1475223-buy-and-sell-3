@@ -25,11 +25,10 @@ module.exports = (_app) => {
 
     try {
       offers = await api.offers.fetch({limit: 3});
-      for (let i = 0; i < offers.length; i++) {
-        const offer = offers.items[i];
+      for (let offer of offers) {
         const comments = await api.comments.fetch(offer.id);
-        hasComments = hasComments || comments.length > 0;
         offer.comments = comments;
+        hasComments = hasComments || comments.length > 0;
       }
     } catch (err) {
       logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);

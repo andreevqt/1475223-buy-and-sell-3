@@ -12,12 +12,6 @@ const type = (value, helpers) => {
 };
 
 module.exports = {
-  id: {
-    params: Joi.object({
-      offerId: Joi.number().required(),
-    })
-  },
-
   create: {
     body: Joi.object({
       title: Joi.string().label(`Заголовок`)

@@ -5,6 +5,7 @@ const Offers = require(`./Offers`);
 const Categories = require(`./Categories`);
 const Search = require(`./Search`);
 const Comments = require(`./Comments`);
+const Users = require(`./Users`);
 const {API_PREFIX} = require(`../../service/constants`);
 
 const url = `${config.app.url}:${config.server.port}${API_PREFIX}`;
@@ -13,10 +14,12 @@ const offers = new Offers(`${url}/offers`);
 const categories = new Categories(`${url}/categories`);
 const search = new Search(`${url}/search`);
 const comments = new Comments(`${url}/offers`);
+const users = new Users(`${url}/users`);
 
 module.exports = {
   offers,
   categories,
   search,
-  comments
+  comments,
+  users
 };
