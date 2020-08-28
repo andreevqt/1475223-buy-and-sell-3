@@ -1,0 +1,7 @@
+- let items = [{name: `Публикации`, url: `/my`}, {name: `Комментарии`, url: `/my/comments`}];
+
+nav.header__user-menu
+  ul.header__list
+    each item in items
+      li.header__item(class=(path === item.url && `header__item--active`))
+        a(href=item.url) #{item.name}

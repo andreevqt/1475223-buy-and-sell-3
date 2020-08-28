@@ -35,6 +35,14 @@
   flex: 1 1 100%;
 }
 
+.login__error {
+  font-size: 12px;
+  background-color: #ffd6cc;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
 .form__helper-text {
   margin-top: 7px;
   font-size: 10px;
@@ -81,4 +89,109 @@
 
 .sign-up__form {
   height: auto;
+}
+
+.ticket-card__del {
+  margin-top: 4px;
+}
+
+.ticket-card__edit {
+  border-bottom: 1px solid transparent;
+  margin-top: -8px;
+}
+
+.author-row {
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+.author-row__inner {
+  padding-left: 90px;
+  min-height: 74px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.author-row__title {
+  color: #2b51a6;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.author-row__email {
+  font-size: 14px;
+}
+
+.author-row__avatar {
+  display: block;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.author-row__avatar img {
+  width: 100%;
+}
+
+.author-row__wrapper {
+  width: 1042px;
+  margin: 0 auto;
+  padding: 0 26px;
+}
+
+.header__dropdown {
+  position: relative;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 16px 0;
+}
+
+.header__dropdown:hover .header__dropdown-content {
+  display: block;
+}
+
+.header__dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  z-index: 9999;
+  margin-top: 5px;
+  width: 200px;
+  background-color: white;
+  border-radius: 3px;
+}
+
+.header__dropdown-item {
+  display: block;
+  padding: 10px 15px;
+}
+
+.ticket-form--settings .form__field label {
+  display: inline-block;
+  position: static;
+  opacity: 1;
+  margin-bottom: 7px;
+}
+
+.ticket-form--settings .ticket-form__avatar {
+  height: 74px;
+  width: 74px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.form__link {
+  display: block;
+  color: #fff;
+  padding: 12px 0;
+}
+
+.message--small {
+  flex-grow: 0;
 }

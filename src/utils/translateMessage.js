@@ -19,6 +19,8 @@ const translateMessage = ({context, type, message}) => {
       return `"${context.label}" должно быть не больше ${context.limit}`;
     case `string.pattern.name`:
       return `"${context.label}" должно содержать ${context.name}`;
+    case `image.allowed`:
+      return `"${context.label}" должно быть ${context.allowed}`;
     default:
       return message;
   }

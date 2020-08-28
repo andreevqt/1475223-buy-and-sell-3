@@ -9,7 +9,8 @@ footer.page-footer
         img(src="/img/logo.svg", width="179" height="35" alt="Логотип Куплю Продам")
     .page-footer__col
       ul.page-footer__nav
-        li
-          a(href="login") Вход и регистрация
+        if !currentUser
+          li
+            a(href="login") Вход и регистрация
         li
           a(href="/offers/add") Создать объявление

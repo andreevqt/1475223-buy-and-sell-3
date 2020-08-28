@@ -19,4 +19,5 @@ mixin ticket-list-item(offer, js=false)
             .ticket-card__desc
               p #{offer.description}
       if js
-          button.ticket-card__del.js-delete(type="button") Удалить
+          a.ticket-card__del.ticket-card__edit(type="button", href=`/offers/edit/${offer.id}`) Редактировать
+          button.ticket-card__del.js-delete.ajax-delete(type="button", data-url=`${meta.apiUrl}/offers/${offer.id}`, data-id=offer.id) Удалить

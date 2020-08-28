@@ -6,11 +6,15 @@ const {API_PREFIX} = require(`../constants`);
 const {services} = require(`./`);
 const {server, setup, teardown} = require(`../test-setup`);
 
+const testUserAttrs = {
+  name: `Джон Доу`,
+  email: `test@email.com`,
+  password: `123456aa`
+};
+
 const offerAttrs = {
-  // authorId: 1,
   category: [`1`, `2`, `3`],
   description: `При покупке с меня бесплатная доставка в черте города. Две страницы заляпаны свежим кофе. Пользовались бережно и только по большим праздникам., Бонусом отдам все аксессуары.`,
-  picture: `item03.jpg`,
   title: `Продам новую приставку Sony Playstation 5.`,
   sum: 42698,
   type: `buy`
@@ -29,14 +33,25 @@ afterAll(async () => {
 });
 
 describe(`${API_PREFIX}/offers api endpoint`, () => {
-  let testOffer = null;
-  let testComment = null;
+  let testOffer;
+  let testComment;
+  let testUser;
 
   beforeEach(async () => {
-    const offer = await services.offers.create(offerAttrs);
-    const comment = await services.comments.create(offer, commentAttrs);
+    await services.users.create(testUserAttrs);
+    testUser = await services.users.login(testUserAttrs.email, testUserAttrs.password);
+
+    const offer = await services.offers.create({authorId: testUser.id, ...offerAttrs});
+    const comment = await services.comments.create(offer, {authorId: testUser.id, ...commentAttrs});
     testOffer = (await offer.reload()).convertToJSON();
     testComment = comment.convertToJSON();
+  });
+
+  afterEach(async () => {
+    await services.offers.delete(testOffer.id);
+    await services.comments.delete(testComment.id);
+    await services.users.logout(testUser.tokens.access);
+    await services.users.delete(testUser.id);
   });
 
   describe(`GET ${API_PREFIX}/offers`, () => {
@@ -45,14 +60,22 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
         .get(`${API_PREFIX}/offers`)
         .expect(200);
 
+      const comparator = (a, b) => a.id - b.id;
       const storedOffers = (await services.offers.findAll())
-        .map((offer) => offer.convertToJSON());
-      const offers = response.body.items;
+        .map((offer) => offer.convertToJSON()).sort(comparator);
+      const offers = response.body.items.sort(comparator);
 
-      expect(storedOffers).toEqual(expect.arrayContaining(offers));
-      expect(Array.isArray(offers)).toBe(true);
       expect(offers.length).toBe(storedOffers.length);
-      expect(storedOffers).toEqual(expect.objectContaining(offers));
+      for (let i = 0; i < offers.length; i++) {
+        expect(storedOffers[i].id).toBe(offers[i].id);
+        expect(storedOffers[i].title).toBe(offers[i].title);
+        expect(storedOffers[i].description).toBe(offers[i].description);
+        expect(storedOffers[i].type).toBe(offers[i].type);
+        expect(storedOffers[i].createdAt).toBe(offers[i].createdAt);
+        expect(storedOffers[i].updatedAt).toBe(offers[i].updatedAt);
+        expect(storedOffers[i].picture).toStrictEqual(offers[i].picture);
+        expect(storedOffers[i].category.sort(comparator)).toEqual(offers[i].category.sort(comparator));
+      }
     });
 
     test(`Should return 400 error if wrong params`, async () => {
@@ -105,6 +128,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should create an offer`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send(offerAttrs)
         .expect(201);
 
@@ -119,17 +143,20 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 400 error if wrong attributes`, async () => {
       let response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, sum: 90});
       expect(response.status).toBe(400);
 
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, title: 123});
       expect(response.status).toBe(400);
 
       // title.length < 10
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, title: `123`});
       expect(response.status).toBe(400);
 
@@ -137,12 +164,14 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       const title = Array.from(Array(1001)).map((_el, i) => i).join(``);
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, title});
       expect(response.status).toBe(400);
 
       // description.length < 50
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, description: `123`});
       expect(response.status).toBe(400);
 
@@ -152,6 +181,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       description = Array.from(Array(52)).map((_el, i) => i).join(``);
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, description});
       expect(response.status).toBe(201);
 
@@ -159,24 +189,28 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
       description = Array.from(Array(1001)).map((_el, i) => i).join(``);
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, description});
       expect(response.status).toBe(400);
 
       // category.length < 1
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, category: []});
       expect(response.status).toBe(400);
 
       // category.length >= 1
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, category: [1]});
       expect(response.status).toBe(201);
 
       // [`buy`, `sell`].includes(type) === false
       response = await request(server)
         .post(`${API_PREFIX}/offers`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...offerAttrs, type: `offer`});
       expect(response.status).toBe(400);
     });
@@ -191,6 +225,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should update an offer`, async () => {
       let response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
         .expect(200);
 
@@ -208,6 +243,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 404 error if offerId is wrong`, async () => {
       const respone = await request(server)
         .put(`${API_PREFIX}/offers/1234`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate);
 
       expect(respone.status).toBe(404);
@@ -218,6 +254,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should delete an offer`, async () => {
       const response = await request(server)
         .delete(`${API_PREFIX}/offers/${testOffer.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .expect(200);
 
       const deleted = response.body;
@@ -226,7 +263,8 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
     test(`Should return 404 error if offerId is wrong`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/offers/1234`);
+        .delete(`${API_PREFIX}/offers/1234`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(404);
     });
@@ -238,7 +276,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .expect(200);
 
-      const comments = response.body;
+      const comments = response.body.items;
       expect(Array.isArray(comments)).toBe(true);
       expect(comments.length).toBe(1);
       expect(comments[0].text).toEqual(commentAttrs.text);
@@ -263,6 +301,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should delete comment by id`, async () => {
       let response = await request(server)
         .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .expect(200);
 
       const comment = response.body;
@@ -276,21 +315,24 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
     test(`Should return 404 error if offerId is wrong`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/offers/1234/comments/${testComment.id}`);
+        .delete(`${API_PREFIX}/offers/1234/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(404);
     });
 
     test(`Should return 404 error if commentId is wrong`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/1234`);
+        .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/1234`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(404);
     });
 
     test(`Should return 400 error if commentId isn't a string`, async () => {
       const response = await request(server)
-        .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/1234asd`);
+        .delete(`${API_PREFIX}/offers/${testOffer.id}/comments/1234asd`)
+        .set(`authorization`, testUser.tokens.access);
 
       expect(response.status).toBe(400);
     });
@@ -298,12 +340,13 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
 
   describe(`POST ${API_PREFIX}/offers/:offerId/comments`, () => {
     const toCreate = {
-      text: `Новый комментарий`
+      text: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis`,
     };
 
     test(`Should create a comment`, async () => {
       let response = await request(server)
         .post(`${API_PREFIX}/offers/${testOffer.id}/comments`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toCreate)
         .expect(201);
 
@@ -314,7 +357,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .expect(200);
 
-      const comments = response.body;
+      const comments = response.body.items;
       expect(comments).toEqual(expect.arrayContaining([
         expect.objectContaining({
           id: created.id,
@@ -327,6 +370,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 404 error if offerId is wrong`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/offers/1234`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toCreate);
 
       expect(response.status).toBe(404);
@@ -335,6 +379,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 400 error if wrong attributes`, async () => {
       const response = await request(server)
         .post(`${API_PREFIX}/offers/${testOffer.id}/comments`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...toCreate, someWrongAttr: true});
 
       expect(response.status).toBe(400);
@@ -349,6 +394,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should update a comment`, async () => {
       let response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
         .expect(200);
 
@@ -359,13 +405,14 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
         .get(`${API_PREFIX}/offers/${testOffer.id}/comments`)
         .expect(200);
 
-      const comments = response.body;
+      const comments = response.body.items;
       expect(comments).toContainEqual(updated);
     });
 
     test(`Should return 404 error if offerId is wrong`, async () => {
       const response = await request(server)
         .put(`${API_PREFIX}/offers/1234/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate);
 
       expect(response.status).toBe(404);
@@ -374,6 +421,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 404 error if commentId is wrong`, async () => {
       const response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}/1234`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate);
 
       expect(response.status).toBe(404);
@@ -382,6 +430,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 404 error if commentId and offerId are wrong`, async () => {
       const response = await request(server)
         .put(`${API_PREFIX}/offers/1234/comments/34343`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate);
 
       expect(response.status).toBe(404);
@@ -390,6 +439,7 @@ describe(`${API_PREFIX}/offers api endpoint`, () => {
     test(`Should return 400 error if attributes are wrong`, async () => {
       const response = await request(server)
         .put(`${API_PREFIX}/offers/${testOffer.id}/comments/${testComment.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send({...toUpdate, someWrongAttr: true});
 
       expect(response.status).toBe(400);

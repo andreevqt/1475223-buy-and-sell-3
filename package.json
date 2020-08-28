@@ -16,6 +16,7 @@
     "migrate": "sequelize-cli db:migrate",
     "migrate::rollback": "sequelize-cli db:migrate:undo:all",
     "migrate::refresh": "npm run migrate::rollback & npm run migrate",
+    "generate::secret": "node ./src/service/service.js --secret",
     "sync": "node ./src/service/service.js --sync",
     "start": "cross-env LOG_LEVEL=error nodemon ./src/service/service.js --server 3000 > ./logs/server.log",
     "start::debug": "cross-env LOG_LEVEL=info nodemon ./src/service/service.js --server 3000 | pino-pretty",
@@ -39,18 +40,22 @@
     "jest": "26.0.1",
     "pino-pretty": "4.0.0",
     "sequelize-cli": "6.2.0",
+    "sinon": "9.0.3",
     "supertest": "4.0.2"
   },
   "dependencies": {
     "axios": "0.19.2",
     "bcrypt": "5.0.0",
     "chalk": "4.0.0",
+    "cookie-parser": "1.4.5",
+    "cors": "2.8.5",
     "cross-env": "7.0.2",
     "dotenv": "8.2.0",
     "express": "4.17.1",
     "express-session": "1.17.1",
     "express-validation": "3.0.5",
     "joi": "17.2.1",
+    "jsonwebtoken": "8.5.1",
     "lodash": "4.17.19",
     "mime": "2.4.5",
     "moment": "2.27.0",
@@ -61,6 +66,7 @@
     "pg-hstore": "2.3.3",
     "pino": "6.2.1",
     "pug": "2.0.4",
-    "sequelize": "6.3.3"
+    "sequelize": "6.3.3",
+    "sharp": "0.26.1"
   }
 }

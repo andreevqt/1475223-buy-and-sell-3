@@ -7,6 +7,9 @@ const api = require(`../../api`);
 const {logger} = require(`../../../utils`).logger;
 const {translateMessage} = require(`../../../utils`);
 const {logRequests} = require(`../../middleware`);
+const cors = require(`cors`);
+const path = require(`path`);
+
 const {
   API_PREFIX
 } = require(`../../constants`);
@@ -17,12 +20,17 @@ const server = async (manager, args) => {
 
   const app = express();
   app.use(express.json());
+  app.use(cors());
   app.use(logRequests);
 
   app.use(API_PREFIX, (req, res, next) => {
     logger.error(`[ROUTE]: ${req.method} ${req.url}`);
     next();
   }, api.router);
+
+  console.log(path.resolve(__dirname, `../../public`));
+
+  app.use(express.static(path.resolve(__dirname, `../../public`)));
 
   app.use((req, res) => res.status(404).send(`Not found`));
   app.use((err, req, res, _next) => {

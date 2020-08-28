@@ -9,7 +9,7 @@ module.exports = (app, services) => {
   app.use(`/categories`, router);
 
   router.get(`/`, parseQuery, async (req, res) => {
-    const {page, limit} = req.locals.parsed;
+    const {page, limit} = res.locals.query;
     const categories = await services.categories.paginate(page, limit);
     res.status(200).json(categories);
   });

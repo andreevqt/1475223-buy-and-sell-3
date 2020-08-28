@@ -4,8 +4,16 @@ require(`dotenv`).config();
 
 module.exports = {
   env: process.env.NODE_ENV || `development`,
+  jwt: {
+    secret: {
+      access: process.env.JWT_SECRET_ACCESS,
+      refresh: process.env.JWT_SECRET_REFRESH
+    },
+    expiresIn: process.env.JWT_EXPIRES_IN || `15m`
+  },
   app: {
-    url:  process.env.APP_URL || `http://localhost`,
+    key: process.env.APP_KEY,
+    url: process.env.APP_URL || `http://localhost`,
     port: process.env.APP_PORT || 8080,
     public: process.env.APP_PUBLIC_FOLDER || `public`
   },

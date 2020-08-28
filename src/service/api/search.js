@@ -9,7 +9,7 @@ module.exports = (app, services) => {
   app.use(`/search`, router);
 
   router.get(`/`, parseQuery, async (req, res) => {
-    const {page, limit, rest} = req.locals.parsed;
+    const {page, limit, rest} = res.locals.query;
     const results = await services
       .search.search(page, limit, {...rest, query: req.query.query});
 

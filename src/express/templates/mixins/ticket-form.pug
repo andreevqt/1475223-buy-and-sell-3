@@ -1,60 +1,60 @@
 mixin ticket-form(formData, label, errors)
   .ticket-form__tile
-    form.ticket-form__form.form(action="" method="post" enctype="multipart/form-data" autocomplete="off")
+    form.ticket-form__form.form(action=``, method=`post`, enctype=`multipart/form-data`, autocomplete=`off`)
       .ticket-form__avatar-container.js-preview-container
         .ticket-form__avatar.js-preview
         if errors && errors.picture
           .ticket-form__field-avatar.ticket-form__field-avatar--invalid
-            input#avatar.visually-hidden.js-file-field(type="file" name="picture")
-            label(for="avatar")
+            input#avatar.visually-hidden.js-file-field(type=`file`, name=`picture`)
+            label(for=`avatar`)
               span.ticket-form__text-upload Загрузить фото…
               span.ticket-form__text-another Загрузить другое фото…
             span.form__helper-text #{errors.picture}
         else
           .ticket-form__field-avatar
-            input#avatar.visually-hidden.js-file-field(type="file" name="picture")
-            label(for="avatar")
+            input#avatar.visually-hidden.js-file-field(type=`file`, name=`picture`, data-old=formData.picture && formData.picture.small)
+            label(for=`avatar`)
               span.ticket-form__text-upload Загрузить фото…
               span.ticket-form__text-another Загрузить другое фото…
       .ticket-form__content
         .ticket-form__row
           if errors && errors.title
             .form__field.form__field--invalid
-              input#ticket-name.js-field(type="text" name="title" required="", value=formData.title)
-              label(for="ticket-name") Название
+              input#ticket-name.js-field(type=`text`, name=`title`, value=formData.title)
+              label(for=`ticket-name`) Название
               span.form__helper-text #{errors.title}
           else
             .form__field
-              input#ticket-name.js-field(type="text" name="title" required="", value=formData.title)
-              label(for="ticket-name") Название
+              input#ticket-name.js-field(type=`text`, name=`title`, value=formData.title)
+              label(for=`ticket-name`) Название
         .ticket-form__row
           if errors && errors.description
             .form__field.form__field--invalid
-              textarea#comment-field.js-field(name="description" cols="30" rows="10" maxlength="400") #{formData.description}
-              label(for="comment-field") Описание
+              textarea#comment-field.js-field(name=`description`, cols=`30`, rows=`10`, maxlength=`400`) #{formData.description}
+              label(for=`comment-field`) Описание
               span #{errors.description}
           else
             .form__field
-              textarea#comment-field.js-field(name="description" cols="30" rows="10" maxlength="400") #{formData.description}
-              label(for="comment-field") Описание
+              textarea#comment-field.js-field(name=`description`, cols=`30`, rows=`10`, maxlength=`400`) #{formData.description}
+              label(for=`comment-field`) Описание
         .ticket-form__row
           if errors && errors.category
             .form__select-container.form__select-container--invalid
-              select#category-field.form__select.form__select--invalid.js-multiple-select(name="category" data-label="Выбрать категорию публикации", data-options=JSON.stringify(categories.items.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id || +el === cat.id)}))))
+              select#category-field.form__select.form__select--invalid.js-multiple-select(name=`category`, data-label=`Выбрать категорию публикации`, data-options=JSON.stringify(categories.items.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id || +el === cat.id)}))))
               span.form__helper-text #{errors.category}
           else
             .form__select-container
-              select#category-field.form__select.js-multiple-select(name="category" data-label="Выбрать категорию публикации", data-options=JSON.stringify(categories.items.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id || +el === cat.id)}))))
+              select#category-field.form__select.js-multiple-select(name=`category`, data-label=`Выбрать категорию публикации`, data-options=JSON.stringify(categories.items.map(cat => ({text: cat.name, value: cat.id, selected: formData.category.some((el) => el.id === cat.id || +el === cat.id)}))))
         .ticket-form__row
           if errors && errors.sum
             .form__field.form__field--invalid.form__field--price
-              input#price-field.js-field.js-price(type="number" name="sum" min="1" required="", value=formData.sum)
-              label(for="price-field") Цена
+              input#price-field.js-field.js-price(type=`number`, name=`sum`, min=`1`, value=formData.sum)
+              label(for=`price-field`) Цена
               span.form__helper-text #{errors.sum}
           else
             .form__field.form__field--price
-              input#price-field.js-field.js-price(type="number" name="sum" min="1" required="", value=formData.sum)
-              label(for="price-field") Цена
+              input#price-field.js-field.js-price(type=`number`, name=`sum`, min=`1`, value=formData.sum)
+              label(for=`price-field`) Цена
           .form__switch.switch
-            +switch("type", types, formData.type)
-      button.form__button.btn.btn--medium.js-button(type="submit" disabled="") #{label}
+            +switch(`type`, types, formData.type)
+      button.form__button.btn.btn--medium.js-button(type=`submit`) #{label}

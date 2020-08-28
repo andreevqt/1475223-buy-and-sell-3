@@ -18,11 +18,11 @@ block content
             p #{offer.description}
           .ticket__data
             p
-              b Дата добавления:
-              span 20 ноября 2019
+              b Дата добавления:  
+              span #{offer.createdAt}
             p
               b Автор:
-              a(href="#")  #{offer.author.name}
+              a(href=`/offers/author/${offer.author.id}`)  #{offer.author.name}
             p
               b Контакты:
               a(href=`mailto:${offer.author.email}`)  #{offer.author.email}
@@ -31,36 +31,37 @@ block content
               li
                 a.category-tile.category-tile--small(href=`/offers/category/${cat.id}`)
                   span.category-tile__image
-                    img(src="/img/cat.jpg", srcset="/img/cat@2x.jpg 2x", alt="Иконка категории")
+                    img(src=cat.picture, srcset=`${cat.picture.replace(/\.(?=[^.]*$)/, `@2x.`)} 2x`, alt="Иконка категории")
                   span.category-tile__label #{cat.name}
 
       .ticket__comments
-        h2.ticket__subtitle Коментарии
+        h2.ticket__subtitle Комментарии
         .ticket__comment-form
-          form.form.comment-form(action="", method="post", autocomplete="off")
-            .comment-form__header
-              a.comment-form__avatar.avatar(href="#")
-                img(src="/img/avatar.jpg", srcset="/img/avatar@2x.jpg 2x", alt="Аватар пользователя")
-              p.comment-form__author Вам слово
-            .comment-form__field
-              .form__field
-                textarea#comment-field.js-field(name="text", cols="30", rows="10", maxlength="400", minlength="50") Нормальное вообще кресло! А как насч
-                label(for="comment-field") Текст комментария
-                span Обязательное поле
-            button.comment-form__button.btn.btn--white.js-button(type="submit" disabled="") Отправить
+          if currentUser
+            form.form.comment-form(action="", method="post", autocomplete="off")
+              .comment-form__header
+                a.comment-form__avatar.avatar(href=`/offers/author/${currentUser.id}`)
+                  +avatar(currentUser)
+                p.comment-form__author Вам слово
+              .comment-form__field
+                .form__field
+                  textarea#comment-field.js-field(name="text", cols="30", rows="10", maxlength="400", minlength="20")
+                  label(for="comment-field") Текст комментария
+                  span Обязательное поле
+              button.comment-form__button.btn.btn--white.js-button(type="submit") Отправить
 
         if comments.length > 0
           .ticket__comments-list
             ul.comments-list
-              each comment in comments
-                li
-                  .comment-card
-                    .comment-card__header
-                      a.comment-card__avatar.avatar(href="#")
-                        img(src=`${comment.author.avatar}`, srcset=`${comment.author.avatar}@2x.jpg 2x`, alt="Аватар пользователя")
-                      p.comment-card__author #{comment.author.name}
-                    .comment-card__content
-                      p #{comment.text}
+              - for (comment of comments)
+                  li
+                    .comment-card
+                      .comment-card__header
+                        a.comment-card__avatar.avatar(href=`/offers/author/${comment.author.id}`)
+                          +avatar(comment.author)
+                        p.comment-card__author #{comment.author.name}
+                      .comment-card__content
+                        p #{comment.text}
         else
           .ticket-message
             p У этой публикации еще нет ни одного комментария.

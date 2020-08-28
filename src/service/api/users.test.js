@@ -20,15 +20,16 @@ describe(`Users api endpoint`, () => {
   const attrs = {
     name: `Джон Доу`,
     email: `test@email.com`,
-    avatar: `/img/avatar02.jpg`,
     password: `123456aa`
   };
 
   beforeEach(async () => {
-    testUser = await services.users.create(attrs);
+    await services.users.create(attrs);
+    testUser = await services.users.login(attrs.email, attrs.password);
   });
 
   afterEach(async () => {
+    await services.users.logout(testUser.tokens.access);
     await services.users.delete(testUser.id);
   });
 
@@ -57,7 +58,6 @@ describe(`Users api endpoint`, () => {
         .expect(200);
 
       const user = response.body;
-
       expect(storedUser).toEqual(expect.objectContaining(user));
     });
 
@@ -80,7 +80,6 @@ describe(`Users api endpoint`, () => {
     const toCreate = {
       name: `Джейн Доу`,
       email: `test1234@email.com`,
-      avatar: `/img/avatar02.jpg`,
       password: `123456aa`
     };
 
@@ -93,7 +92,6 @@ describe(`Users api endpoint`, () => {
       const user = response.body;
       expect(user.name).toEqual(toCreate.name);
       expect(user.email).toEqual(toCreate.email);
-      expect(user.avatar).toEqual(toCreate.avatar);
 
       await services.users.delete(user.id);
     });
@@ -134,7 +132,8 @@ describe(`Users api endpoint`, () => {
       };
 
       const response = await request(server)
-        .put(`${API_PREFIX}/users/1`)
+        .put(`${API_PREFIX}/users/${testUser.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .send(toUpdate)
         .expect(200);
 
@@ -147,10 +146,50 @@ describe(`Users api endpoint`, () => {
     test(`Should delete a user`, async () => {
       const response = await request(server)
         .delete(`${API_PREFIX}/users/${testUser.id}`)
+        .set(`authorization`, testUser.tokens.access)
         .expect(200);
 
       const deleted = response.body;
       expect(testUser).toEqual(expect.objectContaining(deleted));
+    });
+  });
+
+  describe(`POST ${API_PREFIX}/users/login`, () => {
+    test(`Should authorize a user`, async () => {
+      const response = await request(server)
+        .post(`${API_PREFIX}/users/login`)
+        .send({email: attrs.email, password: attrs.password});
+
+      expect(response.status).toBe(200);
+    });
+
+    test(`Should return 403 error if wrong credentials`, async () => {
+      let response;
+      // wrong password
+      response = await request(server)
+        .post(`${API_PREFIX}/users/login`)
+        .send({email: attrs.email, password: `123`});
+      expect(response.status).toBe(403);
+
+      // wrong email
+      response = await request(server)
+        .post(`${API_PREFIX}/users/login`)
+        .send({email: `john@google.com`, password: attrs.password});
+
+      expect(response.status).toBe(403);
+    });
+  });
+
+  describe(`POST ${API_PREFIX}/users/refresh`, () => {
+    test(`Should refresh a token`, async () => {
+      const {refresh} = testUser.tokens;
+      const response = await request(server)
+        .post(`${API_PREFIX}/users/refresh`)
+        .send({
+          token: refresh
+        });
+
+      expect(response.status).toBe(200);
     });
   });
 });

@@ -11,20 +11,31 @@ const {
   offers,
   my
 } = require(`./routes`);
+const cookieParser = require(`cookie-parser`);
+const checkAuth = require(`./middleware/checkAuth`);
+const auth = require(`./middleware/auth`);
 
 const app = express();
 
-app.set(`app_url`, `${config.app.url}:${config.app.port}`);
-app.set(`api_url`, `${config.app.url}:${config.server.port}${API_PREFIX}`);
-app.set(`logger`, logger);
+const apiUrl = `${config.app.url}:${config.server.port}${API_PREFIX}`;
 
 app.use(express.urlencoded({
   extended: true
 }));
+
+app.use(cookieParser(config.app.key));
+
+app.use((req, res, next) => {
+  res.locals.meta = {};
+  res.locals.meta = {apiUrl};
+  res.locals.path = req.path;
+  next();
+});
+
 // routes
-app.use(`/`, main(app));
-app.use(`/my`, my(app));
-app.use(`/offers`, offers(app));
+app.use(`/`, auth, main(app));
+app.use(`/my`, [auth, checkAuth], my(app));
+app.use(`/offers`, auth, offers(app));
 
 app.use(express.static(path.resolve(__dirname, config.app.public)));
 
@@ -34,7 +45,12 @@ app.use((req, res, _next) => {
 });
 
 app.use((err, req, res, _next) => {
-  logger.info(`[ERROR]: status - 500, url: ${req.url}, msg: ${err.message}`);
+  if (err.response) {
+    logger.error(`[ERROR] route: ${req.url}, status: ${err.response.status}, message: ${err.response.data}`);
+  } else {
+    logger.info(`[ERROR] route: ${req.url}, message: ${err.message}, stack: ${err.stack}`);
+  }
+
   res.status(500).render(`errors/500`);
 });
 

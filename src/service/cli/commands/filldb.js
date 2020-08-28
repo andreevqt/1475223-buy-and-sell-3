@@ -22,7 +22,7 @@ const {data} = require(`../../test-setup`);
 
 const generatePicture = () => {
   const idx = randomInt(1, MAX_IMAGE_IDX);
-  return `item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
+  return `/img/item${pad(idx, getNumLen(MAX_IMAGE_IDX))}.jpg`;
 };
 
 const generateDate = () => {
@@ -30,6 +30,11 @@ const generateDate = () => {
   const diff = +now - +now.subtract(2, `months`);
   const randomDate = +now - randomInt(0, diff);
   return moment(randomDate).format(`YYYY-MM-DD hh:mm:ss`);
+};
+
+const generateCatPicture = () => {
+  const idx = randomInt(1, 6);
+  return `/img/cat${pad(idx, 2)}.jpg`;
 };
 
 const getRndField = (arr) => arr[randomInt(0, arr.length - 1)];
@@ -40,12 +45,20 @@ const filldb = async (manager, args) => {
 
   // users
   await service.bulkDelete(`users`);
-  const users = await User.bulkCreate(data.users);
+  const users = await await User.bulkCreate(data.users);
 
   // categories
   await service.bulkDelete(`categories`);
   const categoriesText = await readData(`${root}/categories.txt`);
-  const categories = await Category.bulkCreate(categoriesText.map((name) => ({name})));
+  const categories = await Category.bulkCreate(categoriesText.map((name) => ({
+    picture: generateCatPicture(),
+    name
+  })));
+
+  if (!count) {
+    await service.close();
+    return;
+  }
 
   // offers
   await service.bulkDelete(`offers`);

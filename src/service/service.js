@@ -8,7 +8,8 @@ const {
   server,
   fill,
   sync,
-  filldb
+  filldb,
+  secret
 } = require(`./cli/commands`);
 const chalk = require(`chalk`);
 
@@ -30,9 +31,10 @@ commandManager
   .add(`--help`, `печатает этот текст`, help)
   .add(`--server`, `запускает http-server`, server, [`port`])
   .add(`--sync`, `синхронизирует бд с моделями`, sync)
+  .add(`--secret`, `генерирует secret key`, secret)
   .execute(command, args)
   .catch((err) => {
     console.log(chalk.red(`Ошибка!`));
-    console.log(chalk.red(err.message));
+    console.log(chalk.red(`message: ${err.message}, stack: ${err.stack}`));
     process.exit(1);
   });

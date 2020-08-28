@@ -33,7 +33,12 @@ module.exports = (sequelize, DataTypes) => {
         attributes: [`id`, `name`, `email`, `avatar`]
       }];
       const exclude = [`authorId`];
-      return {include: include, attributes: {exclude: exclude}};
+
+      const order = [
+        [`createdAt`, `desc`]
+      ];
+
+      return {include: include, attributes: {exclude: exclude}, order: order};
     }
   }
 

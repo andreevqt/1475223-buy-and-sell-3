@@ -8,4 +8,5 @@ module.exports = {
   fill: require(`./fill`),
   filldb: require(`./filldb`),
   sync: require(`./sync`),
+  secret: require(`./secret`)
 };

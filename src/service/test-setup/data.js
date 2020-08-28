@@ -2,15 +2,15 @@
 
 module.exports = {
   users: [{
-    name: `Евгений Cмирнов`,
+    name: `Евгений Смирнов`,
     email: `evgen2002@ya.ru`,
-    avatar: `/img/avatar02.jpg`,
-    password: `5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5`,
+    avatar: `/img/avatar01.jpg`,
+    password: `123456`,
   }, {
     name: `Василий Уткин`,
     email: `vas12121@ya.ru`,
-    avatar: `/img/avatar.jpg`,
-    password: `5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5`,
+    avatar: `/img/avatar02.jpg`,
+    password: `123456`,
   }],
   categories: [
     `Разное`,
@@ -41,7 +41,7 @@ module.exports = {
     title: `Продам отличную подборку фильмов на VHS.`,
     sum: 42698,
     type: `offer`
-  }, {
+  } * /, / * {
     authorId: 1,
     category: [1, 2, 3],
     description: `При покупке с меня бесплатная доставка в черте города. Две страницы заляпаны свежим кофе. Пользовались бережно и только по большим праздникам., Бонусом отдам все аксессуары.`,

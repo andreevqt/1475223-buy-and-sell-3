@@ -1,0 +1,21 @@
+extends ../layouts/base/layout
+
+block content
+  section.author-row
+    .author-row__wrapper
+      .author-row__inner
+        .author-row__avatar
+          if author.avatar
+            img(src=`${author.avatar.small}` srcset=`${author.avatar.big} 2x`, alt="Аватар пользователя")
+          else
+            img(src=`//avatars.dicebear.com/api/male/${author.id}.svg`, alt="Аватар пользователя")
+
+        .author-row__title #{author.name}
+        a.author-row__email(href=`mailto:${author.email}`) #{author.email}
+      
+  if offers.length
+    +ticket-list(`Публикации`, null, offers, true)
+  else
+    .message.message--small
+      .message__text У данного автора пока нет публикаций
+

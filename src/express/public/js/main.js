@@ -1,14 +1,39 @@
 'use strict';
 
+function getCookie(name) {
+  var matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+window.meta = window.meta || JSON.parse(document.documentElement.dataset.meta);
+axios.defaults.headers.authorization = getCookie('access_token');
+
+'use strict';
+
 (function () {
   var deletEls = document.querySelectorAll('.js-delete');
   for (var i = 0; i < deletEls.length; i++) {
     deletEls[i].addEventListener('click', function () {
       var card = this.closest('.js-card');
       card.parentNode.removeChild(card);
-
-    })
+    });
   }
+
+  
+  var removableItems = document.querySelectorAll('.ajax-delete');
+
+  for (var i = 0; i < removableItems.length; i++) {
+    removableItems[i].addEventListener('click', function (e) {
+      var el = e.currentTarget;
+      var url = el.dataset.url;
+
+      axios.delete(url).then(function () {
+        location.reload();
+      });
+    });
+  };
 })();
 
 'use strict';
@@ -111,11 +136,28 @@
       reader.readAsDataURL(file);
     };
 
+    var loadPicture = function (url) {
+      var request = new XMLHttpRequest();
+      request.open('GET', url, true);
+      request.responseType = 'blob';
+      request.onload = function () {
+        var file = request.response;
+        readFilePhoto(file);
+        signUpAvatarContainer.classList.add('uploaded');
+      };
+      request.send();
+    };
+
     signUpFieldAvatarInput.addEventListener('change', function () {
       var file = signUpFieldAvatarInput.files[0];
       readFilePhoto(file);
       signUpAvatarContainer.classList.add('uploaded');
     });
+
+    var oldPicture = signUpFieldAvatarInput.dataset.old;
+    if (oldPicture) {
+      loadPicture(oldPicture);
+    }
   }
 })();
 

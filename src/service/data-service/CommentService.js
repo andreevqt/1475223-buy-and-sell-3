@@ -12,11 +12,16 @@ class CommentService extends BaseService {
     });
   }
 
+  async paginate(offer, page, limit) {
+    return super.paginate(page, limit, {
+      where: {
+        offerId: offer.id
+      }
+    });
+  }
+
   async create(offer, attrs) {
     const offerId = typeof offer === `object` ? offer.id : offer;
-
-    const user = await this._services.users.random();
-    attrs.authorId = user.id;
     attrs.offerId = offerId;
 
     const comment = await this._model.create(attrs);
