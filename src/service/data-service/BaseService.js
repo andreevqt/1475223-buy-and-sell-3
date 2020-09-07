@@ -67,6 +67,15 @@ class BaseService {
     return items[randomInt(0, items.length - 1)];
   }
 
+  async update(idOrObj, attrs) {
+    const model = typeof idOrObj === `number` ? await this._model.findByPk(idOrObj) : idOrObj;
+    if (model) {
+      await model.update(attrs);
+    }
+
+    return model.reload();
+  }
+
   async delete(idOrObj) {
     if (!idOrObj) {
       return null;

@@ -10,5 +10,6 @@ module.exports = {
   formatDate: require(`./formatDate`),
   logger: require(`./logger`),
   readData: require(`./readData`),
-  isClass: require(`./isClass`)
+  isClass: require(`./isClass`),
+  translateMessage: require(`./translateMessage`)
 };

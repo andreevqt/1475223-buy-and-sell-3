@@ -1,4 +1,5 @@
 'use strict';
+/* eslint-disable new-cap */
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -10,10 +11,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(100)
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(1000)
       },
       picture: {
         type: Sequelize.JSON

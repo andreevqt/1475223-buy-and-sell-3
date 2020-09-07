@@ -5,6 +5,7 @@ const {Router} = require(`express`);
 const offers = require(`./offers`);
 const search = require(`./search`);
 const categories = require(`./categories`);
+const users = require(`./users`);
 const {Offer, Category, User, Comment, service} = require(`../models`);
 
 const {
@@ -28,6 +29,7 @@ const router = new Router();
 offers(router, services);
 search(router, services);
 categories(router, services);
+users(router, services);
 
 module.exports = {
   router,
