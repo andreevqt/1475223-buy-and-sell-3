@@ -89,7 +89,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/edit/:offerId`, [checkAuth, checkAuthor, csrf], async (req, res) => {
+  router.get(`/edit/:offerId`, [checkAuth, checkAuthor, ...csrf], async (req, res) => {
     try {
       const formData = res.locals.offer;
       const categories = await api.categories.fetch();
@@ -99,7 +99,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.post(`/edit/:offerId`, [checkAuth, checkAuthor, upload.single(`picture`), csrf], async (req, res, next) => {
+  router.post(`/edit/:offerId`, [checkAuth, checkAuthor, upload.single(`picture`), ...csrf], async (req, res, next) => {
     try {
       const {offerId} = req.params;
       const picture = req.file ? req.file.buffer.toString(`base64`) : undefined;
