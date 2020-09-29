@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const upload = require(`../middleware/upload`);
 const checkAuth = require(`../middleware/checkAuth`);
 const checkAuthor = require(`../middleware/checkAuthor`);
+const csrf = require(`../middleware/csrf`);
 const api = require(`../api-services`);
 
 module.exports = (_app) => {
@@ -34,7 +35,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/add`, checkAuth, async (_req, res, next) => {
+  router.get(`/add`, [checkAuth, ...csrf], async (_req, res, next) => {
     try {
       const formData = {category: [], type: `buy`};
       const categories = await api.categories.fetch();
@@ -44,7 +45,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.post(`/add`, [checkAuth, upload.single(`picture`)], async (req, res, next) => {
+  router.post(`/add`, [checkAuth, upload.single(`picture`), ...csrf], async (req, res, next) => {
     try {
       const picture = req.file ? req.file.buffer.toString(`base64`) : undefined;
       const formData = {picture, category: [], ...req.body};
@@ -65,7 +66,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/:offerId`, async (_req, res) => {
+  router.get(`/:offerId`, csrf, async (_req, res) => {
     try {
       const {offer} = res.locals;
       const comments = await api.comments.fetch(offer.id);
@@ -76,7 +77,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.post(`/:offerId`, checkAuth, async (req, res) => {
+  router.post(`/:offerId`, [checkAuth, ...csrf], async (req, res) => {
     const {offer} = res.locals;
     const comment = req.body;
 
@@ -88,7 +89,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/edit/:offerId`, [checkAuth, checkAuthor], async (req, res) => {
+  router.get(`/edit/:offerId`, [checkAuth, checkAuthor, csrf], async (req, res) => {
     try {
       const formData = res.locals.offer;
       const categories = await api.categories.fetch();
@@ -98,7 +99,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.post(`/edit/:offerId`, [checkAuth, checkAuthor, upload.single(`picture`)], async (req, res, next) => {
+  router.post(`/edit/:offerId`, [checkAuth, checkAuthor, upload.single(`picture`), csrf], async (req, res, next) => {
     try {
       const {offerId} = req.params;
       const picture = req.file ? req.file.buffer.toString(`base64`) : undefined;

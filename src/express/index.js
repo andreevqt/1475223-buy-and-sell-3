@@ -25,6 +25,7 @@ app.use(express.urlencoded({
 
 app.use(cookieParser(config.app.key));
 
+
 app.use((req, res, next) => {
   res.locals.meta = {};
   res.locals.meta = {apiUrl};
@@ -49,6 +50,11 @@ app.use((err, req, res, _next) => {
     logger.error(`[ERROR] route: ${req.url}, status: ${err.response.status}, message: ${err.response.data}`);
   } else {
     logger.info(`[ERROR] route: ${req.url}, message: ${err.message}, stack: ${err.stack}`);
+  }
+
+  if (err.status === 403) {
+    res.render(`errors/403`);
+    return;
   }
 
   res.status(500).render(`errors/500`);

@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const api = require(`../api-services`);
 const upload = require(`../middleware/upload`);
+const csrf = require(`../middleware/csrf`);
 
 const router = new Router();
 
@@ -36,11 +37,11 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/settings`, async (req, res) => {
+  router.get(`/settings`, csrf, async (req, res) => {
     res.render(`pages/settings`);
   });
 
-  router.post(`/settings`, upload.single(`avatar`), async (req, res, next) => {
+  router.post(`/settings`, upload.single(`avatar`), csrf, async (req, res, next) => {
     try {
       const {currentUser} = res.locals;
       const avatar = req.file ? req.file.buffer.toString(`base64`) : undefined;
@@ -57,11 +58,11 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/reset-password`, async (req, res) => {
+  router.get(`/reset-password`, csrf, async (req, res) => {
     res.render(`pages/reset-password`);
   });
 
-  router.post(`/reset-password`, async (req, res, next) => {
+  router.post(`/reset-password`, csrf, async (req, res, next) => {
     try {
       const {newPassword, oldPassword, confirmPassword} = req.body;
 

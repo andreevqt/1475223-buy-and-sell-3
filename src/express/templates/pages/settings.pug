@@ -5,7 +5,7 @@ block content
     .ticket-form__wrapper
       .ticket-form__title Настройки
       .ticket-form__tile
-        form.ticket-form__form.form(action=``, method=`post`, enctype=`multipart/form-data`, autocomplete=`off`)
+        form.ticket-form__form.form(action=`?_csrf=${csrf}`, method=`post`, enctype=`multipart/form-data`, autocomplete=`off`)
           .ticket-form__avatar-container.js-preview-container
             .ticket-form__avatar.js-preview
             .ticket-form__field-avatar

@@ -2,7 +2,7 @@ extends ../layouts/base/layout
 
 block content
   section.sign-up
-    form.sign-up__form.form(action=`` method=`post` enctype=`multipart/form-data` autocomplete=`off`)
+    form.sign-up__form.form(action=`?_csrf=${csrf}` method=`post` enctype=`multipart/form-data` autocomplete=`off`)
       .sign-up__title
         h2 Регистрация
         a.sign-up__link(href=`/login`) Вход

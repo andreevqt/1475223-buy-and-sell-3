@@ -5,6 +5,7 @@ const _ = require(`lodash`);
 const api = require(`../api-services`);
 const upload = require(`../middleware/upload`);
 const checkAuth = require(`../middleware/checkAuth`);
+const csrf = require(`../middleware/csrf`);
 
 const router = new Router();
 
@@ -43,7 +44,7 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/login`, (_req, res) => {
+  router.get(`/login`, csrf, (_req, res) => {
     if (res.locals.currentUser) {
       res.redirect(`back`);
       return;
@@ -51,7 +52,7 @@ module.exports = (_app) => {
     res.render(`pages/login`);
   });
 
-  router.post(`/login`, async (req, res, next) => {
+  router.post(`/login`, csrf, async (req, res, next) => {
     try {
       const {email, password} = req.body;
       const {result, errors} = await api.users.login(email, password);
@@ -78,11 +79,11 @@ module.exports = (_app) => {
     }
   });
 
-  router.get(`/register`, (_req, res) => {
+  router.get(`/register`, csrf, (_req, res) => {
     res.render(`pages/register`, {formData: {}});
   });
 
-  router.post(`/register`, upload.single(`avatar`), async (req, res, next) => {
+  router.post(`/register`, [upload.single(`avatar`), ...csrf], async (req, res, next) => {
     try {
       const {password, confirmPassword, email} = req.body;
       const avatar = req.file ? req.file.filename : undefined;

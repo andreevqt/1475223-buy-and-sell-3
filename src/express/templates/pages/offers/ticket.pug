@@ -6,7 +6,10 @@ block content
       h1.visually-hidden Карточка объявления
       .ticket__content
         .ticket__img
-          img(src=offer.picture.small, srcset=`${offer.picture.big} 2x`, alt="Изображение товара")
+          if (offer.picture)
+            img(src=offer.picture.small, srcset=`${offer.picture.big} 2x`, alt="Изображение товара")
+          else
+            img(src=`/img/blank.png`, srcset=`/img/blank@2x.png 2x`, alt="Изображение товара")
         .ticket__info
           h2.ticket__title #{offer.title}
           .ticket__header
@@ -38,7 +41,7 @@ block content
         h2.ticket__subtitle Комментарии
         .ticket__comment-form
           if currentUser
-            form.form.comment-form(action="", method="post", autocomplete="off")
+            form.form.comment-form(action=`?_csrf=${csrf}`, method=`post`, autocomplete=`off`)
               .comment-form__header
                 a.comment-form__avatar.avatar(href=`/offers/author/${currentUser.id}`)
                   +avatar(currentUser)
