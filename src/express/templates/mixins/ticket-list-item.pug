@@ -1,9 +1,12 @@
 mixin ticket-list-item(offer, js=false)
   li(class=`${attributes.class} ${js ? ` js-card` : ``}`)
     .ticket-card.ticket-card--color01
-      if offer.picture
-        .ticket-card__img
-          img(src=offer.picture.small, srcset=`${offer.picture.big} 2x`, alt="Изображение товара")
+      .ticket-card__img
+        if offer.picture
+            img(src=offer.picture.small, srcset=`${offer.picture.big} 2x`, alt="Изображение товара")
+        else
+            img(src=`/img/blank.png`, srcset=`/img/blank@2x.png 2x`, alt="Изображение товара")
+
       .ticket-card__info
         span.ticket-card__label #{offer.type === "sell" ? "Продам" : "Куплю"}
         .ticket-card__categories
@@ -19,4 +22,5 @@ mixin ticket-list-item(offer, js=false)
             .ticket-card__desc
               p #{offer.description}
       if js
-          button.ticket-card__del.js-delete(type="button") Удалить
+          a.ticket-card__del.ticket-card__edit(type="button", href=`/offers/edit/${offer.id}`) Редактировать
+          button.ticket-card__del.js-delete.ajax-delete(type="button", data-url=`${meta.apiUrl}/offers/${offer.id}`, data-id=offer.id) Удалить

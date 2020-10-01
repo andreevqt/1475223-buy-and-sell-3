@@ -7,6 +7,11 @@ block content
         .tickets-list__header
           a.tickets-list__btn.btn.btn--big(href="/offers/add")
             span Новая публикация
-        ul
-         - for (let offer of offers)
-            +ticket-list-item(offer, true)(class="tickets-list__item")
+        if !offers.length
+          .message
+            .message__text У вас нет ни одной публикации
+        else
+          ul
+            - for (let offer of offers)
+                +ticket-list-item(offer, true)(class="tickets-list__item")
+          .tickets-list__pagination !{offers.links()}

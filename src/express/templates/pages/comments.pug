@@ -5,7 +5,7 @@ block content
     .comments__wrapper
       h1.visually-hidden Страница комментариев
       if hasComments
-        - for (let offer of offers)
+        - for (const offer of offers)
           .comments__block
             .comments__header
               a.announce-card(href=`/offers/${offer.id}`)
@@ -14,16 +14,15 @@ block content
                   span.announce-card__price ₽ #{offer.sum}
                   span.announce-card__type #{offer.type === `buy` ? `КУПЛЮ` : `ПРОДАМ`}
             ul.comments-list
-              each comment in offer.comments
-                li.js-card
-                  .comment-card
-                    .comment-card__header
-                      a.comment-card__avatar.avatar(href="#")
-                        img(src=`${comment.author.avatar}` srcset=`${comment.author.avatar} 2x` alt="Аватар пользователя")
-                      p.comment-card__author #{comment.author.name}
-                    .comment-card__content
-                      p #{comment.text}
-                    button.comment-card__delete.js-delete(type="button") Удалить
+              - for (const comment of offer.comments)
+                  li.js-card
+                    .comment-card
+                      .comment-card__header
+                        a.comment-card__avatar.avatar(href="#")
+                          img(src=`${comment.author.avatar.small}`, srcset=`${comment.author.avatar.big} 2x`, alt="Аватар пользователя")
+                        p.comment-card__author #{comment.author.name}
+                      .comment-card__content
+                        p #{comment.text}
+                      button.comment-card__delete.js-delete.ajax-delete(type=`button`, data-url=`${meta.apiUrl}/offers/${offer.id}/comments/${comment.id}`) Удалить
       else
         .comments__message У ваших публикаций ещё нет комментариев
-

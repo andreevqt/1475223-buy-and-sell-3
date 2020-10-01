@@ -2,56 +2,56 @@ extends ../layouts/base/layout
 
 block content
   section.sign-up
-    form.sign-up__form.form(action="" method="post" enctype="multipart/form-data" autocomplete="off")
+    form.sign-up__form.form(action=`?_csrf=${csrf}` method=`post` enctype=`multipart/form-data` autocomplete=`off`)
       .sign-up__title
         h2 Регистрация
-        a.sign-up__link(href="/login") Вход
+        a.sign-up__link(href=`/login`) Вход
       .sign-up__avatar-container.js-preview-container
         .sign-up__avatar.js-preview
         .sign-up__field-avatar
-          input#avatar.visually-hidden.js-file-field(type="file" name="avatar")
-          label(for="avatar")
+          input#avatar.visually-hidden.js-file-field(type=`file` name=`avatar`)
+          label(for=`avatar`)
             span.sign-up__text-upload Загрузить аватар…
             span.sign-up__text-another Загрузить другой аватар…
 
       if errors && errors.name
         .form__field.form__field--invalid.sign-up__field
-          input#user-name.js-field(type="text", name="name", value=formData.name)
-          label(for="name") Имя и фамилия
+          input#name.js-field(type=`text`, name=`name`, value=formData.name)
+          label(for=`name`) Имя и фамилия
           span #{errors.name}
       else
         .form__field.sign-up__field
-          input#user-name.js-field(type="text" name="name" value=formData.name)
-          label(for="name") Имя и фамилия
+          input#name.js-field(type=`text`, name=`name`, value=formData.name)
+          label(for=`name`) Имя и фамилия
 
       if errors && errors.email
         .form__field.form__field--invalid.sign-up__field
-          input#user-email.js-field(type="email" name="email" value=formData.email)
-          label(for="email") Эл. почта
+          input#email.js-field(type=`email`, name=`email`, value=formData.email)
+          label(for=`email`) Эл. почта
           span #{errors.email}
       else 
         .form__field.sign-up__field
-          input#user-email.js-field(type="email" name="email" value=formData.email)
-          label(for="email") Эл. почта
+          input#email.js-field(type=`email`, name=`email`, value=formData.email)
+          label(for=`email`) Эл. почта
 
       if errors && errors.password
         .form__field.form__field--invalid.sign-up__field
-          input#user-password.js-field(type="password" name="password")
-          label(for="password") Пароль
+          input#password.js-field(type=`password`, name=`password`)
+          label(for=`password`) Пароль
           span #{errors.password}
       else
         .form__field.sign-up__field
-          input#user-password.js-field(type="password" name="password")
-          label(for="password") Пароль
+          input#password.js-field(type=`password`, name=`password`)
+          label(for=`password`) Пароль
 
       if errors && errors.confirmPassword
         .form__field.form__field--invalid.sign-up__field
-          input#user-password-again.js-field(type="password" name="confirmPassword")
-          label(for="confirmPassword") Пароль еще раз
+          input#confirmPassword.js-field(type=`password`, name=`confirmPassword`)
+          label(for=`confirmPassword`) Пароль еще раз
           span #{errors.confirmPassword}
       else
         .form__field.sign-up__field
-          input#user-password-again.js-field(type="password" name="confirmPassword")
-          label(for="confirmPassword") Пароль еще раз
+          input#confirmPassword.js-field(type=`password`, name=`confirmPassword`)
+          label(for=`confirmPassword`) Пароль еще раз
 
-      button.sign-up__button.btn.btn--medium.js-button(type="submit" disabled="") Создать аккаунт
+      button.sign-up__button.btn.btn--medium.js-button(type=`submit`) Создать аккаунт

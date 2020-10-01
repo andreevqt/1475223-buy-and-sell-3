@@ -4,6 +4,9 @@
 
 const BaseModel = require(`./BaseModel`);
 const {Sequelize} = require(`sequelize`);
+const moment = require(`moment`);
+
+moment.locale(`ru`);
 
 module.exports = (sequelize, DataTypes) => {
   class Offer extends BaseModel {
@@ -25,10 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static findByCategory(page, limit, categoryId) {
+      const id = sequelize.escape(categoryId);
       return this.paginate(page, limit, {
         where: {
           id: {
-            [Sequelize.Op.in]: [sequelize.literal(`(SELECT "offerId" FROM "offers_categories" WHERE "categoryId" = ${categoryId})`)]
+            [Sequelize.Op.in]: [sequelize.literal(`(SELECT "offerId" FROM "offers_categories" WHERE "categoryId" = ${id})`)]
           }
         }
       });
@@ -43,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       }, {
         model: Category,
         as: `category`,
-        attributes: [`id`, `name`],
+        attributes: [`id`, `name`, `picture`],
         through: {attributes: []}
       }];
 
@@ -72,14 +76,13 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     picture: {
-      type: DataTypes.JSON,
-      set: function (value) {
-        const picture = {
-          orig: `/img/${value}`,
-          big: `/img/${value}`,
-          small: `/img/${value}`
-        };
-        this.setDataValue(`picture`, picture);
+      type: DataTypes.STRING,
+      get: BaseModel.getThumbnail(`picture`)
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      get: function () {
+        return moment(this.getDataValue(`createdAt`)).format(`DD MMMM YYYY`);
       }
     },
     type: {type: DataTypes.STRING, defaultValue: `buy`},

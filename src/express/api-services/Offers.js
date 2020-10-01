@@ -2,12 +2,20 @@
 
 const Base = require(`./Base`);
 const axios = require(`axios`);
-const {Collection} = require(`../helpers`);
 
 class Offers extends Base {
   async fetchByCat({id, ...params}) {
-    const items = (await axios.get(`${this.url}/category/${id}`, {params})).data;
-    return new Collection(items, items.totalPages, items.currentPage);
+    const url = `${this.url}/category/${id}`;
+    return super.fetchData(url, params);
+  }
+
+  async fetchByAuthor({id, ...params}) {
+    const url = `${this.url}/author/${id}`;
+    return super.fetchData(url, params);
+  }
+
+  async addComment(offerId, comment) {
+    return (await axios.post(`${this.url}/${offerId}/comments`, comment)).data;
   }
 }
 

@@ -5,7 +5,7 @@ const Base = require(`./Base`);
 
 class Comments extends Base {
   async fetch(offerId, params) {
-    return (await axios.get(`${this.url}/${offerId}/comments`, {params})).data;
+    return super.fetchData(`${this.url}/${offerId}/comments`, params);
   }
 
   async create(offerId, attrs) {

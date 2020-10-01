@@ -2,131 +2,143 @@
 
 const {Router} = require(`express`);
 const upload = require(`../middleware/upload`);
-const axios = require(`axios`);
-const {logger} = require(`../../utils`).logger;
+const checkAuth = require(`../middleware/checkAuth`);
+const checkAuthor = require(`../middleware/checkAuthor`);
+const csrf = require(`../middleware/csrf`);
 const api = require(`../api-services`);
 
-module.exports = (app) => {
+module.exports = (_app) => {
   const router = new Router();
-  const url = app.get(`api_url`);
 
   const types = [
     {label: `Куплю`, value: `buy`},
     {label: `Продам`, value: `sell`},
   ];
 
-  router.get(`/add`, async (req, res) => {
-    let categories = [];
-    const formData = {category: [], type: `buy`};
-
+  router.param(`offerId`, async (req, res, next, id) => {
     try {
-      categories = await api.categories.fetch();
-    } catch (err) {
-      logger.error(`[ERROR] route: ${req.url}, message: status - ${err.response.status}, data - ${err.response.data}`);
-    }
-
-    res.render(`pages/offers/ticket-add`, {formData, categories, types});
-  });
-
-  router.post(`/add`, upload.single(`picture`), async (req, res) => {
-    const filename = req.file ? req.file.filename : undefined;
-    const formData = {picture: filename, category: [], ...req.body};
-    let categories = [];
-
-    try {
-      categories = await api.categories.fetch();
-      await api.offers.create(formData);
-    } catch (err) {
-      const errors = err.response.data.body;
-      res.render(`pages/offers/ticket-add`, {formData, categories, types, errors});
-      return;
-    }
-
-    res.redirect(`/my`);
-  });
-
-  router.get(`/:id`, async (req, res) => {
-    let offer;
-    let comments;
-    const {id} = req.params;
-
-    try {
-      offer = await api.offers.get(id);
-      comments = await api.comments.fetch(id);
+      const offer = await api.offers.get(id);
+      res.locals.offer = offer;
+      next();
     } catch (err) {
       res.status(404).render(`errors/404`);
-      return;
     }
-
-    res.render(`pages/offers/ticket`, {offer, comments});
   });
 
-  router.post(`/:id`, async (req, res) => {
-    const {id} = req.params;
+  router.param(`authorId`, async (req, res, next, id) => {
+    try {
+      const author = await api.users.get(id);
+      res.locals.author = author;
+      next();
+    } catch (err) {
+      res.status(404).render(`errors/404`);
+    }
+  });
+
+  router.get(`/add`, [checkAuth, ...csrf], async (_req, res, next) => {
+    try {
+      const formData = {category: [], type: `buy`};
+      const categories = await api.categories.fetch();
+      res.render(`pages/offers/ticket-add`, {formData, categories, types});
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post(`/add`, [checkAuth, upload.single(`picture`), ...csrf], async (req, res, next) => {
+    try {
+      const picture = req.file ? req.file.buffer.toString(`base64`) : undefined;
+      const formData = {picture, category: [], ...req.body};
+      if (!Array.isArray(formData.category)) {
+        formData.category = [formData.category];
+      }
+
+      const categories = await api.categories.fetch();
+      const {errors} = await api.offers.create(formData);
+      if (errors) {
+        res.render(`pages/offers/ticket-add`, {formData, categories, types, errors});
+        return;
+      }
+
+      res.redirect(`/my`);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get(`/:offerId`, csrf, async (_req, res) => {
+    try {
+      const {offer} = res.locals;
+      const comments = await api.comments.fetch(offer.id);
+
+      res.render(`pages/offers/ticket`, {offer, comments});
+    } catch (err) {
+      res.status(404).render(`errors/404`);
+    }
+  });
+
+  router.post(`/:offerId`, [checkAuth, ...csrf], async (req, res) => {
+    const {offer} = res.locals;
     const comment = req.body;
 
     try {
-      await axios.post(`${url}/offers/${id}/comments`, comment);
+      await api.offers.addComment(offer.id, comment);
+      res.redirect(`back`);
     } catch (err) {
       res.status(404).render(`errors/404`);
-      return;
     }
-
-    res.redirect(`back`);
   });
 
-  router.get(`/edit/:id`, async (req, res) => {
-    const {id} = req.params;
-    let formData;
-    let categories;
-
+  router.get(`/edit/:offerId`, [checkAuth, checkAuthor, ...csrf], async (req, res) => {
     try {
-      formData = await api.offers.get(id);
-      categories = await api.categories.fetch();
+      const formData = res.locals.offer;
+      const categories = await api.categories.fetch();
+      res.render(`pages/offers/ticket-edit`, {formData, categories, types});
     } catch (err) {
       res.status(404).render(`errors/404`);
-      return;
     }
-
-    res.render(`pages/offers/ticket-edit`, {formData, categories, types});
   });
 
-  router.post(`/edit/:id`, upload.single(`picture`), async (req, res) => {
-    const {id} = req.params;
-    const filename = req.file ? req.file.filename : undefined;
-    const formData = {picture: filename, category: [], ...req.body};
-    let categories;
-
+  router.post(`/edit/:offerId`, [checkAuth, checkAuthor, upload.single(`picture`), ...csrf], async (req, res, next) => {
     try {
-      categories = await api.categories.fetch();
-      await api.offers.update(id, formData);
+      const {offerId} = req.params;
+      const picture = req.file ? req.file.buffer.toString(`base64`) : undefined;
+      const formData = {picture, category: [], ...req.body};
+      const categories = await api.categories.fetch();
+      const {errors} = await api.offers.update(offerId, formData);
+      if (errors) {
+        res.render(`pages/offers/ticket-edit`, {formData, categories, types, errors});
+        return;
+      }
+
+      res.redirect(`/my`);
     } catch (err) {
-      const errors = err.response.data.body;
-      res.render(`pages/offers/ticket-edit`, {formData, categories, types, errors});
-      return;
+      next(err);
     }
-
-    res.redirect(`/my`);
   });
 
-  router.get(`/category/:id`, async (req, res) => {
-    const {query, page, limit} = req.query;
-    const {id} = req.params;
-    let offers = [];
-    let categories = [];
-    let category;
-
+  router.get(`/category/:categoryId`, async (req, res) => {
     try {
-      offers = await api.offers.fetchByCat({id, query, page, limit});
-      categories = await api.categories.fetch();
-      category = await api.categories.get(id);
+      const {categoryId} = req.params;
+      const {query, page, limit} = req.query;
+      const offers = await api.offers.fetchByCat({id: categoryId, query, page, limit});
+      const categories = await api.categories.fetch();
+      const category = await api.categories.get(categoryId);
+      res.render(`pages/category`, {offers, category, categories});
     } catch (err) {
       res.status(404).render(`errors/404`);
-      return;
     }
+  });
 
-
-    res.render(`pages/category`, {offers, category, categories});
+  router.get(`/author/:authorId`, async (req, res) => {
+    try {
+      const {author} = res.locals;
+      const {query, page, limit} = req.query;
+      const offers = await api.offers.fetchByAuthor({id: author.id, query, page, limit});
+      res.render(`pages/author`, {offers});
+    } catch (err) {
+      res.status(404).render(`errors/404`);
+    }
   });
 
   return router;

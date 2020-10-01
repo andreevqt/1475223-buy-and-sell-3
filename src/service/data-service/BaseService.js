@@ -31,7 +31,7 @@ class BaseService {
   }
 
   async bulkCreate(arr) {
-    return this._model.bulkCreate(arr);
+    return Promise.all(arr.map(async (attrs) => await this.create(attrs)));
   }
 
   async create(attrs) {

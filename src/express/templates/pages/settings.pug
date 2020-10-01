@@ -1,0 +1,46 @@
+extends ../layouts/base/layout
+
+block content
+  section.ticket-form.ticket-form--settings
+    .ticket-form__wrapper
+      .ticket-form__title Настройки
+      .ticket-form__tile
+        form.ticket-form__form.form(action=`?_csrf=${csrf}`, method=`post`, enctype=`multipart/form-data`, autocomplete=`off`)
+          .ticket-form__avatar-container.js-preview-container
+            .ticket-form__avatar.js-preview
+            .ticket-form__field-avatar
+              input#avatar.visually-hidden.js-file-field(type=`file`, name=`avatar`, data-old=currentUser.avatar && currentUser.avatar.small)
+              label(for=`avatar`)
+                span.ticket-form__text-upload Загрузить фото…
+                span.ticket-form__text-another Загрузить другое фото…
+          .ticket-form__content
+            .ticket-form__row
+              if errors && errors.name
+                .form__field.form__field--invalid
+                  label(for=`name`) Имя пользователя
+                  input#name.js-field(type=`text`, name=`name`, value=currentUser.name)
+                  span.form__helper-text #{errors.name}
+              else
+                .form__field
+                  label(for=`name`) Имя пользователя
+                  input#name.js-field(type=`text`, name=`name`, value=currentUser.name)
+
+            .ticket-form__row
+              if errors && errors.email
+                .form__field.form__field--invalid
+                  label(for=`email`) Электронная почта
+                  input#email.js-field(type=`email`, name=`email`, value=currentUser.email)
+                  span.form__helper-text #{errors.email}
+              else 
+                .form__field
+                  label(for=`email`) Электронная почта
+                  input#email.js-field(type=`email`, name=`email`, value=currentUser.email)
+
+            .ticket-form__row
+              .form__field
+                label Пароль
+                a.form__link(href=`/my/reset-password`) Изменить пароль
+
+          button.form__button.btn.btn--medium.js-button(type=`submit`) Сохранить
+
+    

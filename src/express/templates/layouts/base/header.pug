@@ -1,19 +1,19 @@
-header.header
+header.header(class=currentUser && `header--logged`)
   .header__wrapper
-    a.header__logo.logo(href="/")
-      img(src="/img/logo.svg" width="179" height="34" alt="Логотип Куплю Продам")
-    nav.header__user-menu
-      ul.header__list
-        li.header__item
-          a(href="/my") Публикации
-        li.header__item
-          a(href="/my/comments") Комментарии
-    form.header.search(method="get" action="/search" autocomplete="off")
-      input(type="search" placeholder="Поиск" aria-label="Поиск" name="query")
+    a.header__logo.logo(href=`/`)
+      img(src=`/img/logo.svg`, width=`179`, height=`34`, alt=`Логотип Куплю Продам`)
+    include header_nav
+    form.header.search(method=`get`, action=`/search`, autocomplete=`off`)
+      input(type=`search`, placeholder=`Поиск`, aria-label=`Поиск`, name=`query`)
       .search__icon
       .search__close-btn
-    a.header__avatar.avatar(href="#")
-      img(src="/img/avatar.jpg" srcset="/img/avatar@2x.jpg 2x" alt="Аватар пользователя")
-    a.header__input(href="/login") Вход и регистрация
+    if currentUser
+      .header__dropdown
+        .header__avatar.avatar
+          +avatar(currentUser)
+        .header__dropdown-content
+          a.header__dropdown-item(href=`/my/settings`) Настройки
+          a.header__dropdown-item(href=`/offers/add`) Создать объявление
+          a.header__dropdown-item(href=`/logout`) Выход
 
-
+    a.header__input(href=`/login`) Вход и регистрация

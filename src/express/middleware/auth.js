@@ -1,0 +1,51 @@
+'use strict';
+
+const config = require(`../../../config`);
+const jwt = require(`jsonwebtoken`);
+const api = require(`../api-services`);
+const axios = require(`axios`);
+
+const auth = async (req, res, next) => {
+  const accessToken = req.cookies.access_token;
+  const refreshToken = req.cookies.refresh_token;
+
+  const setHeaders = (token) => {
+    axios.defaults.headers.authorization = token;
+  };
+
+  const getUID = (token) => {
+    const decoded = jwt.verify(token, config.jwt.secret.access);
+    return decoded.userId;
+  };
+
+  const setCookies = (tokens) => {
+    res.cookie(`access_token`, tokens.access);
+    res.cookie(`refresh_token`, tokens.refresh, {httpOnly: true});
+  };
+
+  if (accessToken) {
+    setHeaders(accessToken);
+
+    if (!res.locals.currentUser) {
+      let userId;
+      try {
+        userId = getUID(accessToken);
+      } catch (err) {
+        // refresh
+        const tokens = await api.users.refresh(refreshToken);
+
+        setHeaders(tokens.access);
+        setCookies(tokens);
+
+        userId = getUID(tokens.access);
+      }
+
+      res.locals.currentUser = await api.users.get(userId);
+    }
+  }
+
+  next();
+};
+
+
+module.exports = auth;

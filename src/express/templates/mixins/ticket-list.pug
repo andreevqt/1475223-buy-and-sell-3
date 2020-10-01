@@ -1,6 +1,7 @@
 mixin ticket-list(title, hiddenTitle, offers, pagination=false)
   section.tickets-list
-    h2.visually-hidden #{hiddenTitle}
+    if hiddenTitle
+      h2.visually-hidden #{hiddenTitle}
     .tickets-list__wrapper
       .tickets-list__header
         p.tickets-list__title #{title} 

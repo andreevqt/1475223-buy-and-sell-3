@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.STRING(1000)
       },
       picture: {
-        type: Sequelize.JSON
+        type: Sequelize.STRING(1000)
       },
       type: {
         type: Sequelize.STRING

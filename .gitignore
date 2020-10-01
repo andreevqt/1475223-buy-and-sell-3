@@ -17,9 +17,6 @@ build/
 # mocks
 mocks.json
 
-# upload
-uploads/*
-
 # thumbnails
 *.thumbnail*
 

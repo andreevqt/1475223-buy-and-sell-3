@@ -1,0 +1,5 @@
+mixin avatar(user)
+  if (user.avatar)
+    img(src=`${user.avatar.small}`, srcset=`${user.avatar.big}@2x.jpg 2x`, alt="Аватар пользователя")
+  else
+    img(src=`//avatars.dicebear.com/api/male/${currentUser.id}.svg`, alt="Аватар пользователя")
